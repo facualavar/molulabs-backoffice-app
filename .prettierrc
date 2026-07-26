@@ -1,0 +1,28 @@
+{
+  "tabWidth": 4,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 100,
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-sort-json"],
+  "importOrder": [
+    "^react$",
+    "^react/(.*)$",
+    "<THIRD_PARTY_MODULES>",
+    "^@/app",
+    "^@/infrastructure",
+    "^@/store",
+    "^@/services",
+    "^@/hooks",
+    "^@/layouts",
+    "^@/components",
+    "^@/domain",
+    "^@/shared",
+    "^@pandacss/(.*)$|^@/styles",
+    "^@/assets",
+    "^@/styled-system",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "jsonRecursiveSort": true
+}
