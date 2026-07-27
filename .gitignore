@@ -16,6 +16,7 @@ styled-system
 .env
 .env.*
 !.env.sample
+.eslintcache
 
 # Editor directories and files
 .vscode/*

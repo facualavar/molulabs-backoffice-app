@@ -8,11 +8,12 @@ const VALID_TYPES = [
     'build',
     'docs',
     'perf',
-    'test'
+    'test',
+    'feat'
 ];
-const TYPES_REQUIRING_SCOPE = ['task', 'upgrade'];
+const TYPES_REQUIRING_SCOPE = [];
 
-// Formato: `type: TICKET-123 | Subject` (task/upgrade requieren ticket; el resto no)
+// Formato: `type: Subject` (ningún tipo requiere ticket como scope)
 module.exports = {
     parserPreset: {
         parserOpts: {
