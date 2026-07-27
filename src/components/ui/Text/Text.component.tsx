@@ -1,11 +1,13 @@
-import type { CSSProperties, ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
+import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
 
 import { css, cx } from 'styled-system/css';
+import { token } from 'styled-system/tokens';
 
 interface TextProps extends ComponentPropsWithoutRef<'p'> {
     as?: ElementType;
     children: ReactNode;
-    color?: CSSProperties['color'];
+    /** Token path (eg. "sidenav.text") or a literal CSS color, overrides the variant's color */
+    color?: string;
     variant?: TextVariant;
 }
 
@@ -37,11 +39,12 @@ export const Text = ({
     ...rest
 }: TextProps) => {
     const Component = as ?? defaultTag[variant];
+    const resolvedColor = color ? token(`colors.${color}`, color) : undefined;
 
     return (
         <Component
             className={cx(variantClass[variant], className)}
-            style={color ? { color, ...style } : style}
+            style={resolvedColor ? { color: resolvedColor, ...style } : style}
             {...rest}
         >
             {children}
