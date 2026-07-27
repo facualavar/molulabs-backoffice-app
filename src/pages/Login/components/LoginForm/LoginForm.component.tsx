@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
-import { css } from 'styled-system/css';
+
+import { Button, Checkbox, Input, Stack, Text } from '@/components/ui';
 
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from '@/domain/constants/form.constant';
 import type { SerializableError } from '@/domain/models/error.model';
@@ -15,16 +16,6 @@ interface LoginFormProps {
     loading: boolean;
     onSubmit: (values: LoginFormValues) => void;
 }
-
-const fieldClass = css({ display: 'flex', flexDirection: 'column', gap: '1' });
-const inputClass = css({
-    border: '1px solid',
-    borderColor: 'gray.300',
-    borderRadius: 'md',
-    fontSize: 'sm',
-    padding: '2'
-});
-const errorTextClass = css({ color: 'red.600', fontSize: 'xs' });
 
 export const LoginForm = ({ errors, loading, onSubmit }: LoginFormProps) => {
     const formikRef = useRef<FormikProps<LoginFormValues>>(null);
@@ -45,12 +36,13 @@ export const LoginForm = ({ errors, loading, onSubmit }: LoginFormProps) => {
             validationSchema={validationSchema}
         >
             {(formik) => (
-                <Form className={css({ display: 'flex', flexDirection: 'column', gap: '4' })}>
-                    <label className={fieldClass}>
-                        Email
-                        <input
-                            className={inputClass}
+                <Form>
+                    <Stack gap="4">
+                        <Input
                             data-testid="login-form-input-email"
+                            error={formik.touched.email ? formik.errors.email : undefined}
+                            isRequired
+                            label="Email"
                             maxLength={EMAIL_MAX_LENGTH}
                             name="email"
                             onBlur={formik.handleBlur}
@@ -58,16 +50,12 @@ export const LoginForm = ({ errors, loading, onSubmit }: LoginFormProps) => {
                             type="email"
                             value={formik.values.email}
                         />
-                        {formik.touched.email && formik.errors.email ? (
-                            <span className={errorTextClass}>{formik.errors.email}</span>
-                        ) : null}
-                    </label>
 
-                    <label className={fieldClass}>
-                        Contraseña
-                        <input
-                            className={inputClass}
+                        <Input
                             data-testid="login-form-input-contrasena"
+                            error={formik.touched.contrasena ? formik.errors.contrasena : undefined}
+                            isRequired
+                            label="Contraseña"
                             maxLength={PASSWORD_MAX_LENGTH}
                             name="contrasena"
                             onBlur={formik.handleBlur}
@@ -75,50 +63,30 @@ export const LoginForm = ({ errors, loading, onSubmit }: LoginFormProps) => {
                             type="password"
                             value={formik.values.contrasena}
                         />
-                        {formik.touched.contrasena && formik.errors.contrasena ? (
-                            <span className={errorTextClass}>{formik.errors.contrasena}</span>
-                        ) : null}
-                    </label>
 
-                    <label
-                        className={css({
-                            alignItems: 'center',
-                            display: 'flex',
-                            fontSize: 'sm',
-                            gap: '2'
-                        })}
-                    >
-                        <input
+                        <Checkbox
                             checked={formik.values.recordar}
                             data-testid="login-form-input-recordar"
+                            id="input-recordar"
+                            label="Recordar mi usuario"
                             name="recordar"
                             onChange={formik.handleChange}
-                            type="checkbox"
                         />
-                        Recordar mi usuario
-                    </label>
 
-                    {errors && !errors.fields ? (
-                        <span className={errorTextClass} role="alert">
-                            {errors.message}
-                        </span>
-                    ) : null}
+                        {errors && !errors.fields ? (
+                            <Text role="alert" variant="error">
+                                {errors.message}
+                            </Text>
+                        ) : null}
 
-                    <button
-                        className={css({
-                            background: 'blue.600',
-                            borderRadius: 'md',
-                            color: 'white',
-                            cursor: 'pointer',
-                            fontWeight: 'medium',
-                            padding: '2'
-                        })}
-                        data-testid="login-form-action-submit"
-                        disabled={loading}
-                        type="submit"
-                    >
-                        {loading ? 'Ingresando...' : 'Ingresar'}
-                    </button>
+                        <Button
+                            data-testid="login-form-action-submit"
+                            fullWidth
+                            label={loading ? 'Ingresando...' : 'Ingresar'}
+                            loading={loading}
+                            type="submit"
+                        />
+                    </Stack>
                 </Form>
             )}
         </Formik>
