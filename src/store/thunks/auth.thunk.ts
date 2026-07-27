@@ -18,7 +18,7 @@ export const loginThunk = createAsyncThunk<
 >('auth/login', async (credentials, { rejectWithValue }) => {
     try {
         const auth = await login(credentials);
-        saveTokens(auth, credentials.recordar ? 'local' : 'session');
+        saveTokens(auth, credentials.rememberMe ? 'local' : 'session');
         return auth;
     } catch (error) {
         return rejectWithValue(toSerializableError(error));

@@ -52,24 +52,24 @@ export const LoginForm = ({ errors, loading, onSubmit }: LoginFormProps) => {
                         />
 
                         <Input
-                            data-testid="login-form-input-contrasena"
-                            error={formik.touched.contrasena ? formik.errors.contrasena : undefined}
+                            data-testid="login-form-input-password"
+                            error={formik.touched.password ? formik.errors.password : undefined}
                             isRequired
                             label="Contraseña"
                             maxLength={PASSWORD_MAX_LENGTH}
-                            name="contrasena"
+                            name="password"
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
                             type="password"
-                            value={formik.values.contrasena}
+                            value={formik.values.password}
                         />
 
                         <Checkbox
-                            checked={formik.values.recordar}
-                            data-testid="login-form-input-recordar"
-                            id="input-recordar"
+                            checked={formik.values.rememberMe}
+                            data-testid="login-form-input-remember-me"
+                            id="input-remember-me"
                             label="Recordar mi usuario"
-                            name="recordar"
+                            name="rememberMe"
                             onChange={formik.handleChange}
                         />
 

@@ -8,9 +8,11 @@ export const PUBLIC_ROUTES = {
 } as const;
 
 export const PRIVATE_ROUTES = {
-    HOME: '/'
+    HOME: '/',
+    PROFILE: '/profile'
 } as const;
 
 export const ROLES_ROUTES: Record<string, Array<UserRole>> = {
-    [PRIVATE_ROUTES.HOME]: [USER_ROLE.ADMIN, USER_ROLE.OPERADOR]
+    [PRIVATE_ROUTES.HOME]: [USER_ROLE.ADMIN, USER_ROLE.OPERATOR],
+    [PRIVATE_ROUTES.PROFILE]: [USER_ROLE.ADMIN, USER_ROLE.OPERATOR]
 };

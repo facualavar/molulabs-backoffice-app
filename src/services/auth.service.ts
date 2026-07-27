@@ -12,7 +12,7 @@ interface LoginApiResponse {
 export const login = async (credentials: LoginFormValues): Promise<Auth> => {
     const { data } = await api.post<LoginApiResponse>('/login', {
         email: credentials.email,
-        password: credentials.contrasena
+        password: credentials.password
     });
 
     return { refreshToken: data.refresh_token, token: data.token };

@@ -8,8 +8,8 @@ describe('LoginPage', () => {
         renderScreen(<LoginPage />);
 
         expect(screen.getByTestId('login-form-input-email')).toBeInTheDocument();
-        expect(screen.getByTestId('login-form-input-contrasena')).toBeInTheDocument();
-        expect(screen.getByTestId('login-form-input-recordar')).toBeInTheDocument();
+        expect(screen.getByTestId('login-form-input-password')).toBeInTheDocument();
+        expect(screen.getByTestId('login-form-input-remember-me')).toBeInTheDocument();
         expect(screen.getByTestId('login-form-action-submit')).toBeInTheDocument();
     });
 });
