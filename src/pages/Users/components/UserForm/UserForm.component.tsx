@@ -1,16 +1,18 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { Button, Input, Select, Stack, Text } from '@/components/ui';
+import { useCompanies } from '@/hooks';
+
+import { Autocomplete, Button, Input, Select, Stack, Text } from '@/components/ui';
 
 import {
     EMAIL_MAX_LENGTH,
     NAME_MAX_LENGTH,
     PASSWORD_MAX_LENGTH
 } from '@/domain/constants/form.constant';
-import type { Company } from '@/domain/models/company.model';
+import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
 import type { SerializableError } from '@/domain/models/error.model';
 import { USER_ROLE } from '@/domain/models/usuario.model';
 
@@ -23,7 +25,6 @@ const ROLE_OPTIONS = [
 ];
 
 interface UserFormProps {
-    companies: Company[];
     errors: null | SerializableError;
     initialValues: UserFormValues;
     loading: boolean;
@@ -31,16 +32,19 @@ interface UserFormProps {
     onSubmit: (values: UserFormValues) => void;
 }
 
-export const UserForm = ({
-    companies,
-    errors,
-    initialValues,
-    loading,
-    mode,
-    onSubmit
-}: UserFormProps) => {
+export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: UserFormProps) => {
     const formikRef = useRef<FormikProps<UserFormValues>>(null);
     const isPasswordRequired = mode === 'create';
+    const [companySearch, setCompanySearch] = useState('');
+
+    const { data: companiesPage, isFetching: isCompaniesFetching } = useCompanies(
+        { limit: 20, name: companySearch },
+        companySearch.length >= MIN_SEARCH_CHARS
+    );
+    const companyOptions = (companiesPage?.data ?? []).map((company) => ({
+        id: String(company.id),
+        label: company.name
+    }));
 
     useEffect(() => {
         if (loading) return;
@@ -48,11 +52,6 @@ export const UserForm = ({
             formikRef.current?.setErrors(errors.fields);
         }
     }, [errors, loading]);
-
-    const companyOptions = companies.map((company) => ({
-        label: company.name,
-        value: String(company.id)
-    }));
 
     return (
         <Formik
@@ -118,17 +117,23 @@ export const UserForm = ({
                             />
                         ) : null}
 
-                        <Select
+                        <Autocomplete
                             data-testid="user-form-input-company"
-                            error={formik.touched.companyId ? formik.errors.companyId : undefined}
+                            error={
+                                formik.touched.company
+                                    ? (formik.errors.company as string | undefined)
+                                    : undefined
+                            }
                             isRequired
                             label="Empresa"
-                            name="companyId"
-                            onBlur={formik.handleBlur}
-                            onChange={formik.handleChange}
+                            loading={isCompaniesFetching}
+                            minChars={MIN_SEARCH_CHARS}
+                            name="company"
+                            onSearch={setCompanySearch}
+                            onSelect={(option) => formik.setFieldValue('company', option)}
                             options={companyOptions}
-                            placeholder="Seleccioná una empresa"
-                            value={formik.values.companyId}
+                            placeholder="Buscar empresa..."
+                            value={formik.values.company}
                         />
 
                         <Select

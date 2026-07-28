@@ -1,9 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
+import type { CompanyListParams } from '@/services/company.service';
 import { getCompanies } from '@/services/company.service';
 
-export const useCompanies = () =>
+export const useCompanies = (params: CompanyListParams = {}, enabled = true) =>
     useQuery({
-        queryFn: getCompanies,
-        queryKey: ['companies']
+        enabled,
+        placeholderData: keepPreviousData,
+        queryFn: () => getCompanies(params),
+        queryKey: ['companies', params]
     });

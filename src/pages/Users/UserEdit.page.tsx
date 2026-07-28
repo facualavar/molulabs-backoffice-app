@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 
-import { useCompanies, useUpdateUser, useUsers } from '@/hooks';
+import { useCompany, useUpdateUser, useUser } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Box, Text } from '@/components/ui';
@@ -14,22 +14,22 @@ import type { UserFormValues } from './components/UserForm/UserForm.schema';
 export const UserEditPage = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
-    const { data: companies } = useCompanies();
-    const { data: users, isLoading } = useUsers();
+    const { data: user, isLoading: isUserLoading } = useUser(Number(id));
+    const { data: company, isLoading: isCompanyLoading } = useCompany(user?.companyId ?? NaN);
     const { error, isPending, mutate } = useUpdateUser();
 
-    const user = users?.find((candidate) => candidate.id === Number(id));
-
-    if (isLoading || !user) {
+    if (isUserLoading || isCompanyLoading || !user || !company) {
         return <LoadingScreen />;
     }
 
     const handleSubmit = (values: UserFormValues) => {
+        if (!values.company) return;
+
         mutate(
             {
                 id: user.id,
                 payload: {
-                    companyId: Number(values.companyId),
+                    companyId: Number(values.company.id),
                     email: values.email,
                     firstname: values.firstname,
                     lastname: values.lastname,
@@ -47,10 +47,9 @@ export const UserEditPage = () => {
                 Editar usuario
             </Text>
             <UserForm
-                companies={companies ?? []}
                 errors={error ? toSerializableError(error) : null}
                 initialValues={{
-                    companyId: String(user.companyId),
+                    company: { id: String(company.id), label: company.name },
                     email: user.email,
                     firstname: user.firstname,
                     lastname: user.lastname,

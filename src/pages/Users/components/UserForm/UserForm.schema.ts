@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 
+import type { AutocompleteOption } from '@/components/ui';
+
 import {
     EMAIL_MAX_LENGTH,
     NAME_MAX_LENGTH,
@@ -8,7 +10,7 @@ import {
 } from '@/domain/constants/form.constant';
 
 export interface UserFormValues {
-    companyId: string;
+    company: AutocompleteOption | null;
     email: string;
     firstname: string;
     lastname: string;
@@ -17,7 +19,7 @@ export interface UserFormValues {
 }
 
 export const emptyUserFormValues: UserFormValues = {
-    companyId: '',
+    company: null,
     email: '',
     firstname: '',
     lastname: '',
@@ -27,7 +29,7 @@ export const emptyUserFormValues: UserFormValues = {
 
 export const buildValidationSchema = (isPasswordRequired: boolean) =>
     Yup.object({
-        companyId: Yup.string().required('La empresa es obligatoria'),
+        company: Yup.object().nullable().required('La empresa es obligatoria'),
         email: Yup.string()
             .matches(REGEX_EMAIL, 'Ingresá un email válido')
             .max(EMAIL_MAX_LENGTH)

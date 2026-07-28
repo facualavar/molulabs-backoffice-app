@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import { useCompanies, useCreateUser } from '@/hooks';
+import { useCreateUser } from '@/hooks';
 
 import { Box, Text } from '@/components/ui';
 
@@ -13,13 +13,14 @@ import type { UserFormValues } from './components/UserForm/UserForm.schema';
 
 export const UserCreatePage = () => {
     const navigate = useNavigate();
-    const { data: companies } = useCompanies();
     const { error, isPending, mutate } = useCreateUser();
 
     const handleSubmit = (values: UserFormValues) => {
+        if (!values.company) return;
+
         mutate(
             {
-                companyId: Number(values.companyId),
+                companyId: Number(values.company.id),
                 email: values.email,
                 firstname: values.firstname,
                 lastname: values.lastname,
@@ -36,7 +37,6 @@ export const UserCreatePage = () => {
                 Nuevo usuario
             </Text>
             <UserForm
-                companies={companies ?? []}
                 errors={error ? toSerializableError(error) : null}
                 initialValues={emptyUserFormValues}
                 loading={isPending}

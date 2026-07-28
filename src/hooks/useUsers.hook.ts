@@ -1,9 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
+import type { UserListParams } from '@/services/user.service';
 import { getUsers } from '@/services/user.service';
 
-export const useUsers = () =>
+export const useUsers = (params: UserListParams = {}) =>
     useQuery({
-        queryFn: getUsers,
-        queryKey: ['users']
+        placeholderData: keepPreviousData,
+        queryFn: () => getUsers(params),
+        queryKey: ['users', params]
     });

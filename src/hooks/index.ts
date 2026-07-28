@@ -1,8 +1,10 @@
 export { useCompanies } from './useCompanies.hook';
+export { useCompany } from './useCompany.hook';
 export { useCreateUser } from './useCreateUser.hook';
 export { useCurrentUser } from './useCurrentUser.hook';
 export { useDeleteUser } from './useDeleteUser.hook';
 export { useUpdatePassword } from './useUpdatePassword.hook';
 export { useUpdateProfile } from './useUpdateProfile.hook';
 export { useUpdateUser } from './useUpdateUser.hook';
+export { useUser } from './useUser.hook';
 export { useUsers } from './useUsers.hook';

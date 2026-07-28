@@ -1,5 +1,6 @@
 import { api } from '@/infrastructure/interceptors/api.interceptor';
 
+import type { PaginatedResponse } from '@/domain/models/pagination.model';
 import type { CurrentUser, User } from '@/domain/models/user.model';
 
 export const getCurrentUser = async (): Promise<CurrentUser> => {
@@ -29,6 +30,12 @@ export const updatePassword = async (payload: UpdatePasswordPayload): Promise<vo
     await api.put('/profile/password', payload);
 };
 
+export interface UserListParams {
+    limit?: number;
+    name?: string;
+    page?: number;
+}
+
 export interface UserPayload {
     companyId: number;
     email: string;
@@ -38,8 +45,14 @@ export interface UserPayload {
     role: string;
 }
 
-export const getUsers = async (): Promise<User[]> => {
-    const { data } = await api.get<User[]>('/users');
+export const getUsers = async (params: UserListParams = {}): Promise<PaginatedResponse<User>> => {
+    const { data } = await api.get<PaginatedResponse<User>>('/users', { params });
+
+    return data;
+};
+
+export const getUser = async (id: number): Promise<User> => {
+    const { data } = await api.get<User>(`/users/${id}`);
 
     return data;
 };
