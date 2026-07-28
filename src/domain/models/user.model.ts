@@ -4,3 +4,7 @@ export interface CurrentUser {
     id: number;
     lastname: string;
 }
+
+export interface User extends CurrentUser {
+    companyId: number;
+}

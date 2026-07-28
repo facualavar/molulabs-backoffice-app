@@ -9,10 +9,14 @@ export const PUBLIC_ROUTES = {
 
 export const PRIVATE_ROUTES = {
     HOME: '/',
-    PROFILE: '/profile'
+    PROFILE: '/profile',
+    USERS: '/users',
+    USERS_EDIT: '/users/:id/edit',
+    USERS_NEW: '/users/new'
 } as const;
 
 export const ROLES_ROUTES: Record<string, Array<UserRole>> = {
-    [PRIVATE_ROUTES.HOME]: [USER_ROLE.ADMIN, USER_ROLE.OPERATOR],
-    [PRIVATE_ROUTES.PROFILE]: [USER_ROLE.ADMIN, USER_ROLE.OPERATOR]
+    [PRIVATE_ROUTES.HOME]: [USER_ROLE.ADMIN, USER_ROLE.USER],
+    [PRIVATE_ROUTES.PROFILE]: [USER_ROLE.ADMIN, USER_ROLE.USER],
+    [PRIVATE_ROUTES.USERS]: [USER_ROLE.ADMIN]
 };

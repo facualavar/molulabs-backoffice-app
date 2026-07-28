@@ -1,4 +1,5 @@
 import { ProfilePage } from '@/pages/Profile';
+import { UserCreatePage, UserEditPage, UsersPage } from '@/pages/Users';
 import { Route, Routes } from 'react-router';
 
 import { AppLayout } from '@/layouts/AppLayout';
@@ -9,6 +10,9 @@ export const AppPrivate = () => (
     <Routes>
         <Route element={<AppLayout />}>
             <Route element={<ProfilePage />} path={PRIVATE_ROUTES.PROFILE} />
+            <Route element={<UsersPage />} path={PRIVATE_ROUTES.USERS} />
+            <Route element={<UserCreatePage />} path={PRIVATE_ROUTES.USERS_NEW} />
+            <Route element={<UserEditPage />} path={PRIVATE_ROUTES.USERS_EDIT} />
             <Route element={<div>Inicio</div>} path="*" />
         </Route>
     </Routes>

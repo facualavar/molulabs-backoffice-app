@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Home } from 'lucide-react';
+import { Home, Users } from 'lucide-react';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 
@@ -22,5 +22,11 @@ export const sidenavSections: SidenavSection[] = [
         icon: Home,
         id: 'home',
         title: 'Inicio'
+    },
+    {
+        basePath: PRIVATE_ROUTES.USERS,
+        icon: Users,
+        id: 'users',
+        title: 'Usuarios'
     }
 ];

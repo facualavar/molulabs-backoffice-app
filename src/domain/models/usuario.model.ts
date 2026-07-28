@@ -1,6 +1,6 @@
 export const USER_ROLE = {
-    ADMIN: 'ADMIN',
-    OPERATOR: 'OPERATOR'
+    ADMIN: 'ROLE_ADMIN',
+    USER: 'ROLE_USER'
 } as const;
 
 export type UserRole = (typeof USER_ROLE)[keyof typeof USER_ROLE];

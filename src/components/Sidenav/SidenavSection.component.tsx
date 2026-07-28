@@ -16,8 +16,9 @@ interface SidenavSectionProps {
 export const SidenavSection = ({ isOpen, onToggle, section }: SidenavSectionProps) => {
     const { isExpanded } = useSidenav();
     const hasChildren = Boolean(section.items?.length);
+    const isRoot = section.basePath === '/';
     const isBaseActive = Boolean(
-        useMatch({ end: section.basePath === '/', path: section.basePath })
+        useMatch({ end: isRoot, path: isRoot ? section.basePath : `${section.basePath}/*` })
     );
     const Icon = section.icon;
 
