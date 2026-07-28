@@ -13,6 +13,7 @@ import {
 } from '@/shared/utilities/storage.utility';
 
 interface ApiErrorBody {
+    detail?: string;
     fields?: Record<string, string>;
     message?: string;
 }
@@ -71,7 +72,7 @@ api.interceptors.response.use(
         const body = error.response?.data;
 
         return Promise.reject(
-            new ErrorResponse(body?.message ?? error.message, status, body?.fields)
+            new ErrorResponse(body?.message ?? body?.detail ?? error.message, status, body?.fields)
         );
     }
 );

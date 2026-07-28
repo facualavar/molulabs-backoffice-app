@@ -1,4 +1,4 @@
-import { useCurrentUser, useUpdateProfile } from '@/hooks';
+import { useCurrentUser, useUpdatePassword, useUpdateProfile } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Box, Text } from '@/components/ui';
@@ -7,10 +7,18 @@ import { toSerializableError } from '@/domain/models/error.model';
 
 import { ProfileForm } from './components/ProfileForm';
 import type { ProfileFormValues } from './components/ProfileForm/ProfileForm.schema';
+import { UpdatePasswordForm } from './components/UpdatePasswordForm';
+import type { UpdatePasswordFormValues } from './components/UpdatePasswordForm/UpdatePasswordForm.schema';
 
 export const ProfilePage = () => {
     const { data: currentUser, isLoading } = useCurrentUser();
     const { error, isPending, isSuccess, mutate } = useUpdateProfile();
+    const {
+        error: passwordError,
+        isPending: isPasswordPending,
+        isSuccess: isPasswordSuccess,
+        mutate: mutatePassword
+    } = useUpdatePassword();
 
     if (isLoading || !currentUser) {
         return <LoadingScreen />;
@@ -18,6 +26,13 @@ export const ProfilePage = () => {
 
     const handleSubmit = (values: ProfileFormValues) => {
         mutate(values);
+    };
+
+    const handleSubmitPassword = (values: UpdatePasswordFormValues) => {
+        mutatePassword({
+            currentPassword: values.currentPassword,
+            newPassword: values.newPassword
+        });
     };
 
     return (
@@ -35,6 +50,16 @@ export const ProfilePage = () => {
                 loading={isPending}
                 onSubmit={handleSubmit}
                 success={isSuccess}
+            />
+
+            <Text style={{ marginBottom: '1.5rem', marginTop: '3rem' }} variant="heading">
+                Actualizar contraseña
+            </Text>
+            <UpdatePasswordForm
+                errors={passwordError ? toSerializableError(passwordError) : null}
+                loading={isPasswordPending}
+                onSubmit={handleSubmitPassword}
+                success={isPasswordSuccess}
             />
         </Box>
     );

@@ -5,6 +5,7 @@ export {
     deleteUser,
     getCurrentUser,
     getUsers,
+    updatePassword,
     updateProfile,
     updateUser
 } from './user.service';

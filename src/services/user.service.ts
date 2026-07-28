@@ -20,6 +20,15 @@ export const updateProfile = async (payload: UpdateProfilePayload): Promise<Curr
     return data;
 };
 
+export interface UpdatePasswordPayload {
+    currentPassword: string;
+    newPassword: string;
+}
+
+export const updatePassword = async (payload: UpdatePasswordPayload): Promise<void> => {
+    await api.put('/profile/password', payload);
+};
+
 export interface UserPayload {
     companyId: number;
     email: string;
