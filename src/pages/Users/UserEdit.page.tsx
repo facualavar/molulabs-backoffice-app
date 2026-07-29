@@ -54,7 +54,7 @@ export const UserEditPage = () => {
                     firstname: user.firstname,
                     lastname: user.lastname,
                     password: '',
-                    role: ''
+                    role: user.role
                 }}
                 loading={isPending}
                 mode="edit"

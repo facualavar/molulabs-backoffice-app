@@ -149,13 +149,6 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
                             value={formik.values.role}
                         />
 
-                        {mode === 'edit' ? (
-                            <Text variant="caption">
-                                La API no informa el rol actual del usuario: seleccionalo de nuevo
-                                antes de guardar.
-                            </Text>
-                        ) : null}
-
                         {errors && !errors.fields ? (
                             <Text role="alert" variant="error">
                                 {errors.message}

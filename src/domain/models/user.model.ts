@@ -3,6 +3,7 @@ export interface CurrentUser {
     firstname: string;
     id: number;
     lastname: string;
+    role: string;
 }
 
 export interface User extends CurrentUser {
