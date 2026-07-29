@@ -16,11 +16,9 @@ export const UserCreatePage = () => {
     const { error, isPending, mutate } = useCreateUser();
 
     const handleSubmit = (values: UserFormValues) => {
-        if (!values.company) return;
-
         mutate(
             {
-                companyId: Number(values.company.id),
+                companyId: values.company ? Number(values.company.id) : null,
                 email: values.email,
                 firstname: values.firstname,
                 lastname: values.lastname,

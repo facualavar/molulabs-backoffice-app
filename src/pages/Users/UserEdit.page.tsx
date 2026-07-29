@@ -1,12 +1,13 @@
 import { useNavigate, useParams } from 'react-router';
 
-import { useCompany, useUpdateUser, useUser } from '@/hooks';
+import { useCompany, useCurrentUser, useUpdateUser, useUser } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Box, Text } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { toSerializableError } from '@/domain/models/error.model';
+import { SUPERADMIN_ROLE } from '@/domain/models/usuario.model';
 
 import { UserForm } from './components/UserForm';
 import type { UserFormValues } from './components/UserForm/UserForm.schema';
@@ -14,22 +15,24 @@ import type { UserFormValues } from './components/UserForm/UserForm.schema';
 export const UserEditPage = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
+    const { data: currentUser } = useCurrentUser();
+    const isSuperAdmin = currentUser?.role === SUPERADMIN_ROLE;
     const { data: user, isLoading: isUserLoading } = useUser(Number(id));
-    const { data: company, isLoading: isCompanyLoading } = useCompany(user?.companyId ?? NaN);
+    const { data: company, isLoading: isCompanyLoading } = useCompany(
+        isSuperAdmin ? (user?.companyId ?? NaN) : NaN
+    );
     const { error, isPending, mutate } = useUpdateUser();
 
-    if (isUserLoading || isCompanyLoading || !user || !company) {
+    if (isUserLoading || !user || (isSuperAdmin && (isCompanyLoading || !company))) {
         return <LoadingScreen />;
     }
 
     const handleSubmit = (values: UserFormValues) => {
-        if (!values.company) return;
-
         mutate(
             {
                 id: user.id,
                 payload: {
-                    companyId: Number(values.company.id),
+                    companyId: values.company ? Number(values.company.id) : null,
                     email: values.email,
                     firstname: values.firstname,
                     lastname: values.lastname,
@@ -49,7 +52,7 @@ export const UserEditPage = () => {
             <UserForm
                 errors={error ? toSerializableError(error) : null}
                 initialValues={{
-                    company: { id: String(company.id), label: company.name },
+                    company: company ? { id: String(company.id), label: company.name } : null,
                     email: user.email,
                     firstname: user.firstname,
                     lastname: user.lastname,

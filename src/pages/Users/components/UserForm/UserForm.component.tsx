@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { useCompanies } from '@/hooks';
+import { useCompanies, useCurrentUser } from '@/hooks';
 
 import { Autocomplete, Button, Input, Select, Stack, Text } from '@/components/ui';
 
@@ -14,14 +14,14 @@ import {
 } from '@/domain/constants/form.constant';
 import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
 import type { SerializableError } from '@/domain/models/error.model';
-import { USER_ROLE } from '@/domain/models/usuario.model';
+import { SUPERADMIN_ROLE, USER_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
 
 import { buildValidationSchema } from './UserForm.schema';
 import type { UserFormValues } from './UserForm.schema';
 
 const ROLE_OPTIONS = [
-    { label: 'Administrador', value: USER_ROLE.ADMIN },
-    { label: 'Usuario', value: USER_ROLE.USER }
+    { label: USER_ROLE_LABEL[USER_ROLE.ADMIN], value: USER_ROLE.ADMIN },
+    { label: USER_ROLE_LABEL[USER_ROLE.USER], value: USER_ROLE.USER }
 ];
 
 interface UserFormProps {
@@ -37,9 +37,12 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
     const isPasswordRequired = mode === 'create';
     const [companySearch, setCompanySearch] = useState('');
 
+    const { data: currentUser } = useCurrentUser();
+    const isCompanySelectable = currentUser?.role === SUPERADMIN_ROLE;
+
     const { data: companiesPage, isFetching: isCompaniesFetching } = useCompanies(
         { limit: 20, name: companySearch },
-        companySearch.length >= MIN_SEARCH_CHARS
+        isCompanySelectable && companySearch.length >= MIN_SEARCH_CHARS
     );
     const companyOptions = (companiesPage?.data ?? []).map((company) => ({
         id: String(company.id),
@@ -60,7 +63,7 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
             innerRef={formikRef}
             onSubmit={onSubmit}
             validateOnBlur={false}
-            validationSchema={buildValidationSchema(isPasswordRequired)}
+            validationSchema={buildValidationSchema(isPasswordRequired, isCompanySelectable)}
         >
             {(formik) => (
                 <Form>
@@ -117,24 +120,26 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
                             />
                         ) : null}
 
-                        <Autocomplete
-                            data-testid="user-form-input-company"
-                            error={
-                                formik.touched.company
-                                    ? (formik.errors.company as string | undefined)
-                                    : undefined
-                            }
-                            isRequired
-                            label="Empresa"
-                            loading={isCompaniesFetching}
-                            minChars={MIN_SEARCH_CHARS}
-                            name="company"
-                            onSearch={setCompanySearch}
-                            onSelect={(option) => formik.setFieldValue('company', option)}
-                            options={companyOptions}
-                            placeholder="Buscar empresa..."
-                            value={formik.values.company}
-                        />
+                        {isCompanySelectable ? (
+                            <Autocomplete
+                                data-testid="user-form-input-company"
+                                error={
+                                    formik.touched.company
+                                        ? (formik.errors.company as string | undefined)
+                                        : undefined
+                                }
+                                isRequired
+                                label="Empresa"
+                                loading={isCompaniesFetching}
+                                minChars={MIN_SEARCH_CHARS}
+                                name="company"
+                                onSearch={setCompanySearch}
+                                onSelect={(option) => formik.setFieldValue('company', option)}
+                                options={companyOptions}
+                                placeholder="Buscar empresa..."
+                                value={formik.values.company}
+                            />
+                        ) : null}
 
                         <Select
                             data-testid="user-form-input-role"

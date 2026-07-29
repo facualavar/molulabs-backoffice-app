@@ -37,7 +37,7 @@ export interface UserListParams {
 }
 
 export interface UserPayload {
-    companyId: number;
+    companyId: null | number;
     email: string;
     firstname: string;
     lastname: string;

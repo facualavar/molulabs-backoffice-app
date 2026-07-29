@@ -27,9 +27,11 @@ export const emptyUserFormValues: UserFormValues = {
     role: ''
 };
 
-export const buildValidationSchema = (isPasswordRequired: boolean) =>
+export const buildValidationSchema = (isPasswordRequired: boolean, isCompanySelectable: boolean) =>
     Yup.object({
-        company: Yup.object().nullable().required('La empresa es obligatoria'),
+        company: isCompanySelectable
+            ? Yup.object().nullable().required('La empresa es obligatoria')
+            : Yup.object().nullable(),
         email: Yup.string()
             .matches(REGEX_EMAIL, 'Ingresá un email válido')
             .max(EMAIL_MAX_LENGTH)

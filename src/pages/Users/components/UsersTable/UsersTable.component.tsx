@@ -5,6 +5,7 @@ import { css } from 'styled-system/css';
 import { Box } from '@/components/ui';
 
 import type { User } from '@/domain/models/user.model';
+import { USER_ROLE_LABEL } from '@/domain/models/usuario.model';
 
 import { getUserEditPath } from '../../users.helper';
 
@@ -66,6 +67,7 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => (
                     <th className={headCellClass}>Nombre</th>
                     <th className={headCellClass}>Apellido</th>
                     <th className={headCellClass}>Email</th>
+                    <th className={headCellClass}>Rol</th>
                     <th className={headCellClass}>
                         <span className={visuallyHiddenClass}>Acciones</span>
                     </th>
@@ -77,6 +79,7 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => (
                         <td className={cellClass}>{user.firstname}</td>
                         <td className={cellClass}>{user.lastname}</td>
                         <td className={cellClass}>{user.email}</td>
+                        <td className={cellClass}>{USER_ROLE_LABEL[user.role] ?? user.role}</td>
                         <td className={actionsCellClass}>
                             <Link
                                 aria-label={`Editar ${user.firstname} ${user.lastname}`}
