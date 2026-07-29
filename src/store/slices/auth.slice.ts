@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { hydrateAuthThunk, loginThunk } from '@/store/thunks/auth.thunk';
+import { hydrateAuthThunk, loginThunk, logoutThunk } from '@/store/thunks/auth.thunk';
 
 import type { SerializableError } from '@/domain/models/error.model';
 
@@ -44,7 +44,8 @@ const authSlice = createSlice({
             .addCase(loginThunk.rejected, (state, action) => {
                 state.loginLoading = false;
                 state.loginError = action.payload ?? { message: 'Ocurrió un error inesperado' };
-            });
+            })
+            .addCase(logoutThunk.fulfilled, () => ({ ...EmptyAuthState, hydrated: true }));
     },
     initialState: EmptyAuthState,
     name: 'auth',
@@ -53,12 +54,11 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
             state.token = action.payload.token;
         },
-        resetAuth: () => EmptyAuthState,
         updateAuth: (state, action: PayloadAction<Partial<AuthState>>) => {
             Object.assign(state, action.payload);
         }
     }
 });
 
-export const { markAuthenticated, resetAuth, updateAuth } = authSlice.actions;
+export const { markAuthenticated, updateAuth } = authSlice.actions;
 export const authReducer = authSlice.reducer;

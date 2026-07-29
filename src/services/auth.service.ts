@@ -17,3 +17,7 @@ export const login = async (credentials: LoginFormValues): Promise<Auth> => {
 
     return { refreshToken: data.refresh_token, token: data.token };
 };
+
+export const logout = async (refreshToken: string): Promise<void> => {
+    await api.post('/logout', { refresh_token: refreshToken });
+};

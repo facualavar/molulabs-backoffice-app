@@ -4,15 +4,13 @@ import { Link, useMatch } from 'react-router';
 
 import type { AppDispatch } from '@/app/store';
 
-import { resetAuth } from '@/store/slices/auth.slice';
+import { logoutThunk } from '@/store/thunks/auth.thunk';
 
 import { useCurrentUser } from '@/hooks';
 
 import { Box, Text } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
-
-import { clearAllStorage } from '@/shared/utilities/storage.utility';
 
 import { useSidenav } from './Sidenav.context';
 
@@ -23,8 +21,7 @@ export const SidenavFooter = () => {
     const isProfileActive = Boolean(useMatch(PRIVATE_ROUTES.PROFILE));
 
     const handleLogout = () => {
-        clearAllStorage();
-        dispatch(resetAuth());
+        dispatch(logoutThunk());
     };
 
     const fullName = currentUser ? `${currentUser.firstname} ${currentUser.lastname}` : '';
