@@ -1,4 +1,3 @@
-import { Plus } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { useCompanies, useDeleteCompany, useNameSearch } from '@/hooks';
@@ -46,11 +45,9 @@ export const CompaniesPage = () => {
                     display="flex"
                     fontSize="sm"
                     fontWeight="medium"
-                    gap="2"
                     padding="2"
                     to={PRIVATE_ROUTES.COMPANIES_NEW}
                 >
-                    <Plus size={16} />
                     Nueva empresa
                 </Box>
             </Box>

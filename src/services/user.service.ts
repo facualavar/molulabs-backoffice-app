@@ -1,5 +1,6 @@
 import { api } from '@/infrastructure/interceptors/api.interceptor';
 
+import type { ExportJob } from '@/domain/models/export.model';
 import type { PaginatedResponse } from '@/domain/models/pagination.model';
 import type { CurrentUser, User } from '@/domain/models/user.model';
 
@@ -29,6 +30,11 @@ export interface UpdatePasswordPayload {
 export const updatePassword = async (payload: UpdatePasswordPayload): Promise<void> => {
     await api.put('/profile/password', payload);
 };
+
+export interface UserExportParams {
+    name?: string;
+    role?: string;
+}
 
 export interface UserListParams {
     limit?: number;
@@ -72,4 +78,10 @@ export const updateUser = async (id: number, payload: UserPayload): Promise<User
 
 export const deleteUser = async (id: number): Promise<void> => {
     await api.delete(`/users/${id}`);
+};
+
+export const exportUsers = async (params: UserExportParams = {}): Promise<ExportJob> => {
+    const { data } = await api.post<ExportJob>('/users/export', null, { params });
+
+    return data;
 };

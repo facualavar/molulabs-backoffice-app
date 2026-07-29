@@ -1,6 +1,5 @@
 import type { ChangeEvent } from 'react';
 
-import { Plus } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router';
 
 import { useDeleteUser, useNameSearch, useUsers } from '@/hooks';
@@ -13,6 +12,7 @@ import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import type { User } from '@/domain/models/user.model';
 import { SUPERADMIN_ROLE, USER_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
 
+import { UsersExport } from './components/UsersExport';
 import { UsersTable } from './components/UsersTable';
 
 const ROLE_FILTER_OPTIONS = [USER_ROLE.ADMIN, USER_ROLE.USER, SUPERADMIN_ROLE].map((role) => ({
@@ -66,21 +66,26 @@ export const UsersPage = () => {
         <Box>
             <Box alignItems="center" display="flex" justifyContent="space-between" marginBottom="6">
                 <Text variant="heading">Usuarios</Text>
-                <Box
-                    alignItems="center"
-                    as={Link}
-                    backgroundColor="primary"
-                    borderRadius="md"
-                    color="white"
-                    display="flex"
-                    fontSize="sm"
-                    fontWeight="medium"
-                    gap="2"
-                    padding="2"
-                    to={PRIVATE_ROUTES.USERS_NEW}
-                >
-                    <Plus size={16} />
-                    Nuevo usuario
+                <Box alignItems="center" display="flex" gap="3">
+                    <UsersExport
+                        key={`${nameFilter}-${roleFilter}`}
+                        name={nameFilter || undefined}
+                        role={roleFilter || undefined}
+                    />
+                    <Box
+                        alignItems="center"
+                        as={Link}
+                        backgroundColor="primary"
+                        borderRadius="md"
+                        color="white"
+                        display="flex"
+                        fontSize="sm"
+                        fontWeight="medium"
+                        padding="2"
+                        to={PRIVATE_ROUTES.USERS_NEW}
+                    >
+                        Nuevo usuario
+                    </Box>
                 </Box>
             </Box>
 

@@ -8,9 +8,11 @@ export {
     updateCompany,
     updateMyCompany
 } from './company.service';
+export { downloadExportFile, getExportJob } from './export.service';
 export {
     createUser,
     deleteUser,
+    exportUsers,
     getCurrentUser,
     getUser,
     getUsers,
