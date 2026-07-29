@@ -45,7 +45,12 @@ const authSlice = createSlice({
                 state.loginLoading = false;
                 state.loginError = action.payload ?? { message: 'Ocurrió un error inesperado' };
             })
-            .addCase(logoutThunk.fulfilled, () => ({ ...EmptyAuthState, hydrated: true }));
+            .addCase(logoutThunk.fulfilled, (state) => {
+                state.isAuthenticated = false;
+                state.loginError = null;
+                state.loginLoading = false;
+                state.token = null;
+            });
     },
     initialState: EmptyAuthState,
     name: 'auth',

@@ -20,11 +20,8 @@ export const logoutThunk = createAsyncThunk('auth/logout', async () => {
     const refreshToken = getRefreshToken();
 
     if (refreshToken) {
-        try {
-            await logout(refreshToken);
-        } catch {
-            // Ignore backend errors, the local session is cleared regardless.
-        }
+        // Fire-and-forget: invalidation happens in the background, the local session clears immediately.
+        void logout(refreshToken).catch(() => {});
     }
 
     clearAllStorage();
