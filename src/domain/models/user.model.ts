@@ -1,3 +1,5 @@
+import type { Company } from '@/domain/models/company.model';
+
 export interface CurrentUser {
     email: string;
     firstname: string;
@@ -7,5 +9,5 @@ export interface CurrentUser {
 }
 
 export interface User extends CurrentUser {
-    companyId: number;
+    company: Pick<Company, 'id' | 'name'>;
 }

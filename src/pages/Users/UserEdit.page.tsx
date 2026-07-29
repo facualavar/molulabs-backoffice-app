@@ -1,13 +1,12 @@
 import { useNavigate, useParams } from 'react-router';
 
-import { useCompany, useCurrentUser, useUpdateUser, useUser } from '@/hooks';
+import { useUpdateUser, useUser } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Box, Text } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { toSerializableError } from '@/domain/models/error.model';
-import { SUPERADMIN_ROLE } from '@/domain/models/usuario.model';
 
 import { UserForm } from './components/UserForm';
 import type { UserFormValues } from './components/UserForm/UserForm.schema';
@@ -15,15 +14,10 @@ import type { UserFormValues } from './components/UserForm/UserForm.schema';
 export const UserEditPage = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
-    const { data: currentUser } = useCurrentUser();
-    const isSuperAdmin = currentUser?.role === SUPERADMIN_ROLE;
-    const { data: user, isLoading: isUserLoading } = useUser(Number(id));
-    const { data: company, isLoading: isCompanyLoading } = useCompany(
-        isSuperAdmin ? (user?.companyId ?? NaN) : NaN
-    );
+    const { data: user, isLoading } = useUser(Number(id));
     const { error, isPending, mutate } = useUpdateUser();
 
-    if (isUserLoading || !user || (isSuperAdmin && (isCompanyLoading || !company))) {
+    if (isLoading || !user) {
         return <LoadingScreen />;
     }
 
@@ -52,7 +46,7 @@ export const UserEditPage = () => {
             <UserForm
                 errors={error ? toSerializableError(error) : null}
                 initialValues={{
-                    company: company ? { id: String(company.id), label: company.name } : null,
+                    company: { id: String(user.company.id), label: user.company.name },
                     email: user.email,
                     firstname: user.firstname,
                     lastname: user.lastname,
