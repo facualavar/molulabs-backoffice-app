@@ -2,13 +2,16 @@ import { useState } from 'react';
 
 import { useLocation } from 'react-router';
 
+import { useCurrentUser } from '@/hooks';
+
 import { Box } from '@/components/ui';
 
+import type { SidenavSection as SidenavSectionType } from './Sidenav.config';
 import { sidenavSections } from './Sidenav.config';
 import { SidenavSection } from './SidenavSection.component';
 
-const findActiveSectionId = (pathname: string): null | string => {
-    const active = sidenavSections.find((section) =>
+const findActiveSectionId = (sections: SidenavSectionType[], pathname: string): null | string => {
+    const active = sections.find((section) =>
         section.items?.some((item) => pathname.startsWith(item.path))
     );
 
@@ -17,13 +20,20 @@ const findActiveSectionId = (pathname: string): null | string => {
 
 export const SidenavContent = () => {
     const location = useLocation();
+    const { data: currentUser } = useCurrentUser();
+
+    const visibleSections = sidenavSections.filter(
+        (section) =>
+            !section.roles || Boolean(currentUser && section.roles.includes(currentUser.role))
+    );
+
     const [openSectionId, setOpenSectionId] = useState<null | string>(() =>
-        findActiveSectionId(location.pathname)
+        findActiveSectionId(visibleSections, location.pathname)
     );
 
     return (
         <Box display="flex" flex="1" flexDirection="column" gap="1" overflowY="auto" padding="2">
-            {sidenavSections.map((section) => (
+            {visibleSections.map((section) => (
                 <SidenavSection
                     isOpen={openSectionId === section.id}
                     key={section.id}
