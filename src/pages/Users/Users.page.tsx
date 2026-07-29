@@ -1,52 +1,23 @@
-import { useEffect, useState } from 'react';
-
 import { Plus } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router';
+import { Link } from 'react-router';
 
-import { useDeleteUser, useUsers } from '@/hooks';
+import { useDeleteUser, useNameSearch, useUsers } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Box, Input, Pagination, Text } from '@/components/ui';
 
-import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/pagination.constant';
+import { DEFAULT_ITEMS_PER_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
-import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
 import type { User } from '@/domain/models/user.model';
 
 import { UsersTable } from './components/UsersTable';
 
 export const UsersPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const currentPage = Number(searchParams.get('page')) || DEFAULT_PAGE;
-    const nameFilter = searchParams.get('name') ?? '';
-    const [nameInput, setNameInput] = useState(nameFilter);
-
-    useEffect(() => {
-        if (nameInput === nameFilter) return;
-        if (nameInput.length > 0 && nameInput.length < MIN_SEARCH_CHARS) return;
-
-        const timeout = setTimeout(() => {
-            setSearchParams((previous) => {
-                const next = new URLSearchParams(previous);
-
-                if (nameInput) {
-                    next.set('name', nameInput);
-                } else {
-                    next.delete('name');
-                }
-                next.set('page', String(DEFAULT_PAGE));
-
-                return next;
-            });
-        }, 300);
-
-        return () => clearTimeout(timeout);
-    }, [nameFilter, nameInput, setSearchParams]);
-
+    const { nameFilter, nameInput, page, setNameInput, setPage } = useNameSearch();
     const { data, isFetching, isLoading } = useUsers({
         limit: DEFAULT_ITEMS_PER_PAGE,
         name: nameFilter || undefined,
-        page: currentPage
+        page
     });
     const { mutate: deleteUser } = useDeleteUser();
 
@@ -56,15 +27,6 @@ export const UsersPage = () => {
         if (confirmed) {
             deleteUser(user.id);
         }
-    };
-
-    const handlePageChange = (page: number) => {
-        setSearchParams((previous) => {
-            const next = new URLSearchParams(previous);
-            next.set('page', String(page));
-
-            return next;
-        });
     };
 
     if (isLoading || !data) {
@@ -108,7 +70,7 @@ export const UsersPage = () => {
             <Pagination
                 currentPage={data.meta.page}
                 disabled={isFetching}
-                onPageChange={handlePageChange}
+                onPageChange={setPage}
                 resultsPerPage={data.meta.limit}
                 totalItems={data.meta.total}
                 totalPages={data.meta.totalPages}

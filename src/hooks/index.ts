@@ -1,8 +1,12 @@
 export { useCompanies } from './useCompanies.hook';
 export { useCompany } from './useCompany.hook';
+export { useCreateCompany } from './useCreateCompany.hook';
 export { useCreateUser } from './useCreateUser.hook';
 export { useCurrentUser } from './useCurrentUser.hook';
+export { useDeleteCompany } from './useDeleteCompany.hook';
 export { useDeleteUser } from './useDeleteUser.hook';
+export { useNameSearch } from './useNameSearch.hook';
+export { useUpdateCompany } from './useUpdateCompany.hook';
 export { useUpdatePassword } from './useUpdatePassword.hook';
 export { useUpdateProfile } from './useUpdateProfile.hook';
 export { useUpdateUser } from './useUpdateUser.hook';

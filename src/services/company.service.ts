@@ -22,3 +22,24 @@ export const getCompany = async (id: number): Promise<Company> => {
 
     return data;
 };
+
+export interface CompanyPayload {
+    email: string;
+    name: string;
+}
+
+export const createCompany = async (payload: CompanyPayload): Promise<Company> => {
+    const { data } = await api.post<Company>('/companies', payload);
+
+    return data;
+};
+
+export const updateCompany = async (id: number, payload: CompanyPayload): Promise<Company> => {
+    const { data } = await api.put<Company>(`/companies/${id}?XDEBUG_TRIGGER=1`, payload);
+
+    return data;
+};
+
+export const deleteCompany = async (id: number): Promise<void> => {
+    await api.delete(`/companies/${id}`);
+};

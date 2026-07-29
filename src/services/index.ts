@@ -1,5 +1,11 @@
 export { login } from './auth.service';
-export { getCompanies, getCompany } from './company.service';
+export {
+    createCompany,
+    deleteCompany,
+    getCompanies,
+    getCompany,
+    updateCompany
+} from './company.service';
 export {
     createUser,
     deleteUser,
