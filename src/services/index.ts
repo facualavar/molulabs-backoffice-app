@@ -4,7 +4,9 @@ export {
     deleteCompany,
     getCompanies,
     getCompany,
-    updateCompany
+    getMyCompany,
+    updateCompany,
+    updateMyCompany
 } from './company.service';
 export {
     createUser,

@@ -24,8 +24,11 @@ export const getCompany = async (id: number): Promise<Company> => {
 };
 
 export interface CompanyPayload {
+    documentNumber: string;
+    documentType: string;
     email: string;
     name: string;
+    phone: string;
 }
 
 export const createCompany = async (payload: CompanyPayload): Promise<Company> => {
@@ -42,4 +45,16 @@ export const updateCompany = async (id: number, payload: CompanyPayload): Promis
 
 export const deleteCompany = async (id: number): Promise<void> => {
     await api.delete(`/companies/${id}`);
+};
+
+export const getMyCompany = async (): Promise<Company> => {
+    const { data } = await api.get<Company>('/profile/company');
+
+    return data;
+};
+
+export const updateMyCompany = async (payload: CompanyPayload): Promise<Company> => {
+    const { data } = await api.put<Company>('/profile/company', payload);
+
+    return data;
 };

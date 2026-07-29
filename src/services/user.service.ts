@@ -34,6 +34,7 @@ export interface UserListParams {
     limit?: number;
     name?: string;
     page?: number;
+    role?: string;
 }
 
 export interface UserPayload {

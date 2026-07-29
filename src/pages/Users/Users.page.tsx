@@ -1,23 +1,52 @@
+import type { ChangeEvent } from 'react';
+
 import { Plus } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 
 import { useDeleteUser, useNameSearch, useUsers } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Input, Pagination, Text } from '@/components/ui';
+import { Box, Input, Pagination, Select, Text } from '@/components/ui';
 
-import { DEFAULT_ITEMS_PER_PAGE } from '@/domain/constants/pagination.constant';
+import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import type { User } from '@/domain/models/user.model';
+import { SUPERADMIN_ROLE, USER_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
 
 import { UsersTable } from './components/UsersTable';
 
+const ROLE_FILTER_OPTIONS = [USER_ROLE.ADMIN, USER_ROLE.USER, SUPERADMIN_ROLE].map((role) => ({
+    label: USER_ROLE_LABEL[role],
+    value: role
+}));
+
 export const UsersPage = () => {
     const { nameFilter, nameInput, page, setNameInput, setPage } = useNameSearch();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const roleFilter = searchParams.get('role') ?? '';
+
+    const handleRoleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+
+        setSearchParams((previous) => {
+            const next = new URLSearchParams(previous);
+
+            if (value) {
+                next.set('role', value);
+            } else {
+                next.delete('role');
+            }
+            next.set('page', String(DEFAULT_PAGE));
+
+            return next;
+        });
+    };
+
     const { data, isFetching, isLoading } = useUsers({
         limit: DEFAULT_ITEMS_PER_PAGE,
         name: nameFilter || undefined,
-        page
+        page,
+        role: roleFilter || undefined
     });
     const { mutate: deleteUser } = useDeleteUser();
 
@@ -55,14 +84,26 @@ export const UsersPage = () => {
                 </Box>
             </Box>
 
-            <Box marginBottom="4" maxWidth="320px">
-                <Input
-                    data-testid="users-filter-input-name"
-                    label="Buscar por nombre"
-                    onChange={(event) => setNameInput(event.target.value)}
-                    placeholder="Nombre o apellido"
-                    value={nameInput}
-                />
+            <Box display="flex" gap="4" marginBottom="4">
+                <Box maxWidth="320px" width="100%">
+                    <Input
+                        data-testid="users-filter-input-name"
+                        label="Buscar por nombre"
+                        onChange={(event) => setNameInput(event.target.value)}
+                        placeholder="Nombre o apellido"
+                        value={nameInput}
+                    />
+                </Box>
+                <Box maxWidth="220px" width="100%">
+                    <Select
+                        data-testid="users-filter-select-role"
+                        label="Filtrar por rol"
+                        onChange={handleRoleChange}
+                        options={ROLE_FILTER_OPTIONS}
+                        placeholder="Todos los roles"
+                        value={roleFilter}
+                    />
+                </Box>
             </Box>
 
             <UsersTable onDelete={handleDelete} users={data.data} />

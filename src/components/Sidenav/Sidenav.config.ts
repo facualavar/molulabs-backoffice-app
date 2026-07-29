@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Building2, Home, Users } from 'lucide-react';
+import { Briefcase, Building2, Home, Users } from 'lucide-react';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { SUPERADMIN_ROLE, USER_ROLE } from '@/domain/models/usuario.model';
@@ -38,5 +38,12 @@ export const sidenavSections: SidenavSection[] = [
         id: 'users',
         roles: [USER_ROLE.ADMIN, SUPERADMIN_ROLE],
         title: 'Usuarios'
+    },
+    {
+        basePath: PRIVATE_ROUTES.MY_COMPANY,
+        icon: Briefcase,
+        id: 'my-company',
+        roles: [USER_ROLE.ADMIN, SUPERADMIN_ROLE],
+        title: 'Mi empresa'
     }
 ];

@@ -35,7 +35,13 @@ export const CompanyEditPage = () => {
             </Text>
             <CompanyForm
                 errors={error ? toSerializableError(error) : null}
-                initialValues={{ email: company.email, name: company.name }}
+                initialValues={{
+                    documentNumber: company.documentNumber,
+                    documentType: company.documentType,
+                    email: company.email,
+                    name: company.name,
+                    phone: company.phone
+                }}
                 loading={isPending}
                 onSubmit={handleSubmit}
             />

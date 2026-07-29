@@ -1,4 +1,5 @@
 import { CompaniesPage, CompanyCreatePage, CompanyEditPage } from '@/pages/Companies';
+import { MyCompanyPage } from '@/pages/MyCompany';
 import { NotFoundPage } from '@/pages/NotFound';
 import { ProfilePage } from '@/pages/Profile';
 import { UserCreatePage, UserEditPage, UsersPage } from '@/pages/Users';
@@ -65,6 +66,14 @@ export const AppPrivate = () => (
                     </RoleRoute>
                 }
                 path={PRIVATE_ROUTES.USERS_EDIT}
+            />
+            <Route
+                element={
+                    <RoleRoute roles={ADMIN_ROLES}>
+                        <MyCompanyPage />
+                    </RoleRoute>
+                }
+                path={PRIVATE_ROUTES.MY_COMPANY}
             />
             <Route element={<NotFoundPage />} path="*" />
         </Route>
