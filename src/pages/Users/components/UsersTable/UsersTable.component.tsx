@@ -1,10 +1,9 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Link } from 'react-router';
 import { css } from 'styled-system/css';
 
 import { useCurrentUser } from '@/hooks';
 
-import { Box } from '@/components/ui';
+import { Box, RowActions } from '@/components/ui';
 
 import type { User } from '@/domain/models/user.model';
 import { SUPERADMIN_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
@@ -39,17 +38,8 @@ const actionsCellClass = css({
     borderBottom: '1px solid',
     borderColor: 'border',
     display: 'flex',
-    gap: '3',
+    justifyContent: 'flex-end',
     padding: '3'
-});
-const iconButtonClass = css({
-    alignItems: 'center',
-    background: 'none',
-    border: 'none',
-    color: 'text.muted',
-    cursor: 'pointer',
-    display: 'flex',
-    padding: '1'
 });
 const visuallyHiddenClass = css({
     border: '0',
@@ -91,21 +81,22 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => {
                             ) : null}
                             <td className={cellClass}>{USER_ROLE_LABEL[user.role] ?? user.role}</td>
                             <td className={actionsCellClass}>
-                                <Link
-                                    aria-label={`Editar ${user.firstname} ${user.lastname}`}
-                                    className={iconButtonClass}
-                                    to={getUserEditPath(user.id)}
-                                >
-                                    <Pencil size={16} />
-                                </Link>
-                                <button
-                                    aria-label={`Eliminar ${user.firstname} ${user.lastname}`}
-                                    className={iconButtonClass}
-                                    onClick={() => onDelete(user)}
-                                    type="button"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
+                                <RowActions
+                                    actions={[
+                                        {
+                                            icon: Pencil,
+                                            label: 'Editar',
+                                            to: getUserEditPath(user.id)
+                                        },
+                                        {
+                                            icon: Trash2,
+                                            isDanger: true,
+                                            label: 'Eliminar',
+                                            onClick: () => onDelete(user)
+                                        }
+                                    ]}
+                                    label={`Acciones de ${user.firstname} ${user.lastname}`}
+                                />
                             </td>
                         </tr>
                     ))}

@@ -1,8 +1,7 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { Link } from 'react-router';
 import { css } from 'styled-system/css';
 
-import { Box } from '@/components/ui';
+import { Box, RowActions } from '@/components/ui';
 
 import type { Company } from '@/domain/models/company.model';
 
@@ -36,17 +35,8 @@ const actionsCellClass = css({
     borderBottom: '1px solid',
     borderColor: 'border',
     display: 'flex',
-    gap: '3',
+    justifyContent: 'flex-end',
     padding: '3'
-});
-const iconButtonClass = css({
-    alignItems: 'center',
-    background: 'none',
-    border: 'none',
-    color: 'text.muted',
-    cursor: 'pointer',
-    display: 'flex',
-    padding: '1'
 });
 const visuallyHiddenClass = css({
     border: '0',
@@ -85,21 +75,22 @@ export const CompaniesTable = ({ companies, onDelete }: CompaniesTableProps) => 
                         <td className={cellClass}>{company.email}</td>
                         <td className={cellClass}>{formatDate(company.createdAt)}</td>
                         <td className={actionsCellClass}>
-                            <Link
-                                aria-label={`Editar ${company.name}`}
-                                className={iconButtonClass}
-                                to={getCompanyEditPath(company.id)}
-                            >
-                                <Pencil size={16} />
-                            </Link>
-                            <button
-                                aria-label={`Eliminar ${company.name}`}
-                                className={iconButtonClass}
-                                onClick={() => onDelete(company)}
-                                type="button"
-                            >
-                                <Trash2 size={16} />
-                            </button>
+                            <RowActions
+                                actions={[
+                                    {
+                                        icon: Pencil,
+                                        label: 'Editar',
+                                        to: getCompanyEditPath(company.id)
+                                    },
+                                    {
+                                        icon: Trash2,
+                                        isDanger: true,
+                                        label: 'Eliminar',
+                                        onClick: () => onDelete(company)
+                                    }
+                                ]}
+                                label={`Acciones de ${company.name}`}
+                            />
                         </td>
                     </tr>
                 ))}
