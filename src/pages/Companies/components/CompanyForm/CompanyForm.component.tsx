@@ -101,9 +101,8 @@ export const CompanyForm = ({
                             }
                             isRequired
                             label="Tipo de documento"
-                            name="documentType"
-                            onBlur={formik.handleBlur}
-                            onChange={formik.handleChange}
+                            onBlur={() => formik.setFieldTouched('documentType')}
+                            onChange={(value) => formik.setFieldValue('documentType', value)}
                             options={DOCUMENT_TYPE_OPTIONS}
                             placeholder="Seleccioná un tipo"
                             value={formik.values.documentType}

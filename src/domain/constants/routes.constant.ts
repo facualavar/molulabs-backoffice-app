@@ -13,6 +13,7 @@ export const PRIVATE_ROUTES = {
     HOME: '/',
     MY_COMPANY: '/my-company',
     PROFILE: '/profile',
+    PROFILE_PASSWORD: '/profile/password',
     USERS: '/users',
     USERS_EDIT: '/users/:id/edit',
     USERS_NEW: '/users/new'
@@ -23,5 +24,6 @@ export const ROLES_ROUTES: Record<string, Array<string>> = {
     [PRIVATE_ROUTES.HOME]: [USER_ROLE.ADMIN, USER_ROLE.USER],
     [PRIVATE_ROUTES.MY_COMPANY]: [USER_ROLE.ADMIN, SUPERADMIN_ROLE],
     [PRIVATE_ROUTES.PROFILE]: [USER_ROLE.ADMIN, USER_ROLE.USER],
+    [PRIVATE_ROUTES.PROFILE_PASSWORD]: [USER_ROLE.ADMIN, USER_ROLE.USER],
     [PRIVATE_ROUTES.USERS]: [USER_ROLE.ADMIN, SUPERADMIN_ROLE]
 };

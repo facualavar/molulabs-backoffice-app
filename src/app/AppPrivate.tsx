@@ -1,7 +1,7 @@
 import { CompaniesPage, CompanyCreatePage, CompanyEditPage } from '@/pages/Companies';
 import { MyCompanyPage } from '@/pages/MyCompany';
 import { NotFoundPage } from '@/pages/NotFound';
-import { ProfilePage } from '@/pages/Profile';
+import { ChangePasswordPage, ProfilePage } from '@/pages/Profile';
 import { UserCreatePage, UserEditPage, UsersPage } from '@/pages/Users';
 import { Route, Routes } from 'react-router';
 
@@ -19,6 +19,7 @@ export const AppPrivate = () => (
         <Route element={<AppLayout />}>
             <Route element={<div>Inicio</div>} path={PRIVATE_ROUTES.HOME} />
             <Route element={<ProfilePage />} path={PRIVATE_ROUTES.PROFILE} />
+            <Route element={<ChangePasswordPage />} path={PRIVATE_ROUTES.PROFILE_PASSWORD} />
             <Route
                 element={
                     <RoleRoute roles={[SUPERADMIN_ROLE]}>

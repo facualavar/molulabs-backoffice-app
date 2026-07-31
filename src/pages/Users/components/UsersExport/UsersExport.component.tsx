@@ -1,10 +1,14 @@
 import { useState } from 'react';
 
+import { css } from 'styled-system/css';
+
 import { useCreateUserExport, useDownloadExportFile, useExportJob } from '@/hooks';
 
 import { Box, Button, Text } from '@/components/ui';
 
 import { EXPORT_STATUS } from '@/domain/models/export.model';
+
+const exportButtonClass = css({ fontSize: 'sm' });
 
 interface UsersExportProps {
     name?: string;
@@ -38,6 +42,7 @@ export const UsersExport = ({ name, role }: UsersExportProps) => {
     return (
         <Box>
             <Button
+                className={exportButtonClass}
                 data-testid="users-export-action-export"
                 disabled={isPreparing || isDownloading}
                 label={label}

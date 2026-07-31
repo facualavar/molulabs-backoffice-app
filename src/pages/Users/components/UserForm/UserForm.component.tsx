@@ -146,9 +146,8 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
                             error={formik.touched.role ? formik.errors.role : undefined}
                             isRequired
                             label="Rol"
-                            name="role"
-                            onBlur={formik.handleBlur}
-                            onChange={formik.handleChange}
+                            onBlur={() => formik.setFieldTouched('role')}
+                            onChange={(value) => formik.setFieldValue('role', value)}
                             options={ROLE_OPTIONS}
                             placeholder="Seleccioná un rol"
                             value={formik.values.role}

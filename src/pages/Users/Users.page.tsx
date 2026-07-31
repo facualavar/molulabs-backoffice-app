@@ -1,5 +1,3 @@
-import type { ChangeEvent } from 'react';
-
 import { Link, useSearchParams } from 'react-router';
 
 import { useDeleteUser, useNameSearch, useUsers } from '@/hooks';
@@ -25,9 +23,7 @@ export const UsersPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const roleFilter = searchParams.get('role') ?? '';
 
-    const handleRoleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value;
-
+    const handleRoleChange = (value: string) => {
         setSearchParams((previous) => {
             const next = new URLSearchParams(previous);
 
