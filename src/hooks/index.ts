@@ -1,6 +1,7 @@
 export { useCompanies } from './useCompanies.hook';
 export { useCompany } from './useCompany.hook';
 export { useCreateCompany } from './useCreateCompany.hook';
+export { useCreateCompanyExport } from './useCreateCompanyExport.hook';
 export { useCreateUser } from './useCreateUser.hook';
 export { useCreateUserExport } from './useCreateUserExport.hook';
 export { useCurrentUser } from './useCurrentUser.hook';

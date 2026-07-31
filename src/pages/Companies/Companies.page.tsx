@@ -9,6 +9,7 @@ import { DEFAULT_ITEMS_PER_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import type { Company } from '@/domain/models/company.model';
 
+import { CompaniesExport } from './components/CompaniesExport';
 import { CompaniesTable } from './components/CompaniesTable';
 
 export const CompaniesPage = () => {
@@ -36,19 +37,22 @@ export const CompaniesPage = () => {
         <Box>
             <Box alignItems="center" display="flex" justifyContent="space-between" marginBottom="6">
                 <Text variant="heading">Empresas</Text>
-                <Box
-                    alignItems="center"
-                    as={Link}
-                    backgroundColor="primary"
-                    borderRadius="md"
-                    color="white"
-                    display="flex"
-                    fontSize="sm"
-                    fontWeight="medium"
-                    padding="2"
-                    to={PRIVATE_ROUTES.COMPANIES_NEW}
-                >
-                    Nueva empresa
+                <Box alignItems="center" display="flex" gap="3">
+                    <CompaniesExport key={nameFilter} name={nameFilter || undefined} />
+                    <Box
+                        alignItems="center"
+                        as={Link}
+                        backgroundColor="primary"
+                        borderRadius="md"
+                        color="white"
+                        display="flex"
+                        fontSize="sm"
+                        fontWeight="medium"
+                        padding="2"
+                        to={PRIVATE_ROUTES.COMPANIES_NEW}
+                    >
+                        Nueva empresa
+                    </Box>
                 </Box>
             </Box>
 

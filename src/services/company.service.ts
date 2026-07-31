@@ -1,7 +1,12 @@
 import { api } from '@/infrastructure/interceptors/api.interceptor';
 
 import type { Company } from '@/domain/models/company.model';
+import type { ExportJob } from '@/domain/models/export.model';
 import type { PaginatedResponse } from '@/domain/models/pagination.model';
+
+export interface CompanyExportParams {
+    name?: string;
+}
 
 export interface CompanyListParams {
     limit?: number;
@@ -13,6 +18,12 @@ export const getCompanies = async (
     params: CompanyListParams = {}
 ): Promise<PaginatedResponse<Company>> => {
     const { data } = await api.get<PaginatedResponse<Company>>('/companies', { params });
+
+    return data;
+};
+
+export const exportCompanies = async (params: CompanyExportParams = {}): Promise<ExportJob> => {
+    const { data } = await api.post<ExportJob>('/companies/export', null, { params });
 
     return data;
 };
