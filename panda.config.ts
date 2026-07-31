@@ -33,6 +33,9 @@ export default defineConfig({
                     semibold: { value: '600' },
                     thin: { value: '200' },
                     ultralight: { value: '100' }
+                },
+                radii: {
+                    md: { value: '0.5rem' }
                 }
             },
             semanticTokens: {
