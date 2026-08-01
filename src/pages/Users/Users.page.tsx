@@ -1,9 +1,9 @@
-import { Link, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import { useDeleteUser, useNameSearch, useUsers } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Input, Pagination, Select, Text } from '@/components/ui';
+import { Box, Button, Input, Pagination, Select, Text } from '@/components/ui';
 
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
@@ -19,6 +19,7 @@ const ROLE_FILTER_OPTIONS = [USER_ROLE.ADMIN, USER_ROLE.USER, SUPERADMIN_ROLE].m
 }));
 
 export const UsersPage = () => {
+    const navigate = useNavigate();
     const { nameFilter, nameInput, page, setNameInput, setPage } = useNameSearch();
     const [searchParams, setSearchParams] = useSearchParams();
     const roleFilter = searchParams.get('role') ?? '';
@@ -68,20 +69,11 @@ export const UsersPage = () => {
                         name={nameFilter || undefined}
                         role={roleFilter || undefined}
                     />
-                    <Box
-                        alignItems="center"
-                        as={Link}
-                        backgroundColor="primary"
-                        borderRadius="md"
-                        color="white"
-                        display="flex"
-                        fontSize="sm"
-                        fontWeight="medium"
-                        padding="2"
-                        to={PRIVATE_ROUTES.USERS_NEW}
-                    >
-                        Nuevo usuario
-                    </Box>
+                    <Button
+                        label="Nuevo usuario"
+                        onClick={() => navigate(PRIVATE_ROUTES.USERS_NEW)}
+                        size="sm"
+                    />
                 </Box>
             </Box>
 
@@ -89,9 +81,9 @@ export const UsersPage = () => {
                 <Box maxWidth="320px" width="100%">
                     <Input
                         data-testid="users-filter-input-name"
-                        label="Buscar por nombre"
+                        label="Nombre"
                         onChange={(event) => setNameInput(event.target.value)}
-                        placeholder="Nombre o apellido"
+                        placeholder="Buscar por nombre o apellido..."
                         value={nameInput}
                     />
                 </Box>

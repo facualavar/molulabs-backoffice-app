@@ -62,7 +62,7 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => {
                     <tr>
                         <th className={headCellClass}>Nombre</th>
                         <th className={headCellClass}>Apellido</th>
-                        <th className={headCellClass}>Email</th>
+                        <th className={headCellClass}>Correo</th>
                         {isSuperAdmin ? <th className={headCellClass}>Empresa</th> : null}
                         <th className={headCellClass}>Rol</th>
                         <th className={headCellClass}>

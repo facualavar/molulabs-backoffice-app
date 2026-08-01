@@ -1,9 +1,9 @@
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { useCompanies, useDeleteCompany, useNameSearch } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Input, Pagination, Text } from '@/components/ui';
+import { Box, Button, Input, Pagination, Text } from '@/components/ui';
 
 import { DEFAULT_ITEMS_PER_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
@@ -13,6 +13,7 @@ import { CompaniesExport } from './components/CompaniesExport';
 import { CompaniesTable } from './components/CompaniesTable';
 
 export const CompaniesPage = () => {
+    const navigate = useNavigate();
     const { nameFilter, nameInput, page, setNameInput, setPage } = useNameSearch();
     const { data, isFetching, isLoading } = useCompanies({
         limit: DEFAULT_ITEMS_PER_PAGE,
@@ -39,29 +40,20 @@ export const CompaniesPage = () => {
                 <Text variant="heading">Empresas</Text>
                 <Box alignItems="center" display="flex" gap="3">
                     <CompaniesExport key={nameFilter} name={nameFilter || undefined} />
-                    <Box
-                        alignItems="center"
-                        as={Link}
-                        backgroundColor="primary"
-                        borderRadius="md"
-                        color="white"
-                        display="flex"
-                        fontSize="sm"
-                        fontWeight="medium"
-                        padding="2"
-                        to={PRIVATE_ROUTES.COMPANIES_NEW}
-                    >
-                        Nueva empresa
-                    </Box>
+                    <Button
+                        label="Nueva empresa"
+                        onClick={() => navigate(PRIVATE_ROUTES.COMPANIES_NEW)}
+                        size="sm"
+                    />
                 </Box>
             </Box>
 
             <Box marginBottom="4" maxWidth="320px">
                 <Input
                     data-testid="companies-filter-input-name"
-                    label="Buscar por nombre"
+                    label="Nombre"
                     onChange={(event) => setNameInput(event.target.value)}
-                    placeholder="Nombre de la empresa"
+                    placeholder="Buscar por nombre..."
                     value={nameInput}
                 />
             </Box>

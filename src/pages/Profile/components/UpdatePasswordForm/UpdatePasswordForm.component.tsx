@@ -113,6 +113,7 @@ export const UpdatePasswordForm = ({
                             data-testid="update-password-form-action-submit"
                             label={loading ? 'Guardando...' : 'Actualizar contraseña'}
                             loading={loading}
+                            size="sm"
                             type="submit"
                         />
                     </Stack>

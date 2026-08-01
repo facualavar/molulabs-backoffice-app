@@ -1,7 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { css } from 'styled-system/css';
 
-import { Box, Text } from '@/components/ui';
+import { Box, Button, Text } from '@/components/ui';
 
 interface PaginationProps {
     currentPage: number;
@@ -11,19 +10,6 @@ interface PaginationProps {
     totalItems: number;
     totalPages: number;
 }
-
-const buttonClass = css({
-    _disabled: { cursor: 'not-allowed', opacity: 0.4 },
-    alignItems: 'center',
-    background: 'none',
-    border: '1px solid',
-    borderColor: 'border',
-    borderRadius: 'md',
-    color: 'text',
-    cursor: 'pointer',
-    display: 'flex',
-    padding: '1'
-});
 
 export const Pagination = ({
     currentPage,
@@ -44,27 +30,27 @@ export const Pagination = ({
                 {firstItem}–{lastItem} de {totalItems}
             </Text>
             <Box alignItems="center" display="flex" gap="3">
-                <button
-                    aria-label="Página anterior"
-                    className={buttonClass}
+                <Button
                     disabled={disabled || currentPage <= 1}
+                    icon={<ChevronLeft size={16} />}
+                    label="Página anterior"
                     onClick={() => onPageChange(currentPage - 1)}
+                    size="xs"
                     type="button"
-                >
-                    <ChevronLeft size={16} />
-                </button>
+                    variant="secondary"
+                />
                 <Text variant="caption">
                     Página {currentPage} de {totalPages}
                 </Text>
-                <button
-                    aria-label="Página siguiente"
-                    className={buttonClass}
+                <Button
                     disabled={disabled || currentPage >= totalPages}
+                    icon={<ChevronRight size={16} />}
+                    label="Página siguiente"
                     onClick={() => onPageChange(currentPage + 1)}
+                    size="xs"
                     type="button"
-                >
-                    <ChevronRight size={16} />
-                </button>
+                    variant="secondary"
+                />
             </Box>
         </Box>
     );

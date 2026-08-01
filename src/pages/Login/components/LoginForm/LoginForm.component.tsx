@@ -84,6 +84,7 @@ export const LoginForm = ({ errors, loading, onSubmit }: LoginFormProps) => {
                             fullWidth
                             label={loading ? 'Ingresando...' : 'Ingresar'}
                             loading={loading}
+                            size="sm"
                             type="submit"
                         />
                     </Stack>

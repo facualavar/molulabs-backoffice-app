@@ -98,6 +98,7 @@ export const ProfileForm = ({
                             data-testid="profile-form-action-submit"
                             label={loading ? 'Guardando...' : 'Guardar cambios'}
                             loading={loading}
+                            size="sm"
                             type="submit"
                         />
                     </Stack>

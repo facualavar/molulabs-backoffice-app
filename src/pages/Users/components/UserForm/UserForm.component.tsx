@@ -163,6 +163,7 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
                             data-testid="user-form-action-submit"
                             label={loading ? 'Guardando...' : 'Guardar'}
                             loading={loading}
+                            size="sm"
                             type="submit"
                         />
                     </Stack>

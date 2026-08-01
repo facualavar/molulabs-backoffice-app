@@ -1,14 +1,10 @@
 import { useState } from 'react';
 
-import { css } from 'styled-system/css';
-
 import { useCreateCompanyExport, useDownloadExportFile, useExportJob } from '@/hooks';
 
 import { Box, Button, Text } from '@/components/ui';
 
 import { EXPORT_STATUS } from '@/domain/models/export.model';
-
-const exportButtonClass = css({ fontSize: 'sm' });
 
 interface CompaniesExportProps {
     name?: string;
@@ -41,12 +37,12 @@ export const CompaniesExport = ({ name }: CompaniesExportProps) => {
     return (
         <Box>
             <Button
-                className={exportButtonClass}
                 data-testid="companies-export-action-export"
                 disabled={isPreparing || isDownloading}
                 label={label}
                 loading={isPreparing}
                 onClick={handleClick}
+                size="sm"
                 variant="secondary"
             />
             {isFailed ? (

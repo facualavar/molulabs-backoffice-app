@@ -61,7 +61,7 @@ export const CompaniesTable = ({ companies, onDelete }: CompaniesTableProps) => 
             <thead>
                 <tr>
                     <th className={headCellClass}>Nombre</th>
-                    <th className={headCellClass}>Email</th>
+                    <th className={headCellClass}>Correo</th>
                     <th className={headCellClass}>Fecha de alta</th>
                     <th className={headCellClass}>
                         <span className={visuallyHiddenClass}>Acciones</span>

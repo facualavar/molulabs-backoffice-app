@@ -137,6 +137,7 @@ export const CompanyForm = ({
                             data-testid="company-form-action-submit"
                             label={loading ? 'Guardando...' : 'Guardar'}
                             loading={loading}
+                            size="sm"
                             type="submit"
                         />
                     </Stack>
