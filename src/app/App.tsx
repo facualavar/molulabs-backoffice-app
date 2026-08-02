@@ -5,6 +5,8 @@ import { AppRoutes } from '@/app/AppRoutes';
 import { AuthBoot } from '@/app/AuthBoot';
 import { store } from '@/app/store';
 
+import { Toaster } from '@/components/ui';
+
 import { ModalProvider } from '@/styles/providers/ModalProvider';
 
 const queryClient = new QueryClient({
@@ -31,6 +33,7 @@ export const App = () => (
                 <AuthBoot>
                     <AppRoutes />
                 </AuthBoot>
+                <Toaster />
             </ModalProvider>
         </QueryClientProvider>
     </Provider>

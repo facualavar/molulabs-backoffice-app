@@ -63,6 +63,7 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => {
                         <th className={headCellClass}>Nombre</th>
                         <th className={headCellClass}>Apellido</th>
                         <th className={headCellClass}>Correo</th>
+                        <th className={headCellClass}>N° documento</th>
                         {isSuperAdmin ? <th className={headCellClass}>Empresa</th> : null}
                         <th className={headCellClass}>Rol</th>
                         <th className={headCellClass}>
@@ -76,6 +77,7 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => {
                             <td className={cellClass}>{user.firstname}</td>
                             <td className={cellClass}>{user.lastname}</td>
                             <td className={cellClass}>{user.email}</td>
+                            <td className={cellClass}>{user.documentNumber}</td>
                             {isSuperAdmin ? (
                                 <td className={cellClass}>{user.company.name}</td>
                             ) : null}

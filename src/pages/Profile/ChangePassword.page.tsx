@@ -1,6 +1,6 @@
 import { useUpdatePassword } from '@/hooks';
 
-import { Box, Text } from '@/components/ui';
+import { Box, Text, toast } from '@/components/ui';
 
 import { toSerializableError } from '@/domain/models/error.model';
 
@@ -11,10 +11,16 @@ export const ChangePasswordPage = () => {
     const { error, isPending, isSuccess, mutate } = useUpdatePassword();
 
     const handleSubmit = (values: UpdatePasswordFormValues) => {
-        mutate({
-            currentPassword: values.currentPassword,
-            newPassword: values.newPassword
-        });
+        mutate(
+            {
+                currentPassword: values.currentPassword,
+                newPassword: values.newPassword
+            },
+            {
+                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onSuccess: () => toast.success('Contraseña actualizada correctamente')
+            }
+        );
     };
 
     return (

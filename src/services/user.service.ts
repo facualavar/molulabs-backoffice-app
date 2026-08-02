@@ -11,13 +11,20 @@ export const getCurrentUser = async (): Promise<CurrentUser> => {
 };
 
 export interface UpdateProfilePayload {
+    documentNumber: string;
     email: string;
     firstname: string;
     lastname: string;
 }
 
-export const updateProfile = async (payload: UpdateProfilePayload): Promise<CurrentUser> => {
-    const { data } = await api.put<CurrentUser>('/profile', payload);
+export const getProfile = async (): Promise<User> => {
+    const { data } = await api.get<User>('/profile');
+
+    return data;
+};
+
+export const updateProfile = async (payload: UpdateProfilePayload): Promise<User> => {
+    const { data } = await api.put<User>('/profile', payload);
 
     return data;
 };
@@ -37,6 +44,7 @@ export interface UserExportParams {
 }
 
 export interface UserListParams {
+    documentNumber?: string;
     limit?: number;
     name?: string;
     page?: number;
@@ -45,6 +53,7 @@ export interface UserListParams {
 
 export interface UserPayload {
     companyId: null | number;
+    documentNumber: string;
     email: string;
     firstname: string;
     lastname: string;

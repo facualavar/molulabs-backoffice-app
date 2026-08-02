@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { useCreateUser } from '@/hooks';
 
-import { Box, Text } from '@/components/ui';
+import { Box, Text, toast } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { toSerializableError } from '@/domain/models/error.model';
@@ -19,13 +19,20 @@ export const UserCreatePage = () => {
         mutate(
             {
                 companyId: values.company ? Number(values.company.id) : null,
+                documentNumber: values.documentNumber,
                 email: values.email,
                 firstname: values.firstname,
                 lastname: values.lastname,
                 password: values.password,
                 role: values.role
             },
-            { onSuccess: () => navigate(PRIVATE_ROUTES.USERS) }
+            {
+                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onSuccess: () => {
+                    toast.success('Usuario creado correctamente');
+                    navigate(PRIVATE_ROUTES.USERS);
+                }
+            }
         );
     };
 

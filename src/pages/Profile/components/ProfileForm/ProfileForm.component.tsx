@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { Button, Input, Stack, Text } from '@/components/ui';
+import { Button, Input, Stack } from '@/components/ui';
 
 import { EMAIL_MAX_LENGTH, NAME_MAX_LENGTH } from '@/domain/constants/form.constant';
 import type { SerializableError } from '@/domain/models/error.model';
@@ -16,16 +16,9 @@ interface ProfileFormProps {
     initialValues: ProfileFormValues;
     loading: boolean;
     onSubmit: (values: ProfileFormValues) => void;
-    success: boolean;
 }
 
-export const ProfileForm = ({
-    errors,
-    initialValues,
-    loading,
-    onSubmit,
-    success
-}: ProfileFormProps) => {
+export const ProfileForm = ({ errors, initialValues, loading, onSubmit }: ProfileFormProps) => {
     const formikRef = useRef<FormikProps<ProfileFormValues>>(null);
 
     useEffect(() => {
@@ -84,15 +77,20 @@ export const ProfileForm = ({
                             value={formik.values.email}
                         />
 
-                        {errors && !errors.fields ? (
-                            <Text role="alert" variant="error">
-                                {errors.message}
-                            </Text>
-                        ) : null}
-
-                        {success ? (
-                            <Text variant="caption">Perfil actualizado correctamente.</Text>
-                        ) : null}
+                        <Input
+                            data-testid="profile-form-input-document-number"
+                            error={
+                                formik.touched.documentNumber
+                                    ? formik.errors.documentNumber
+                                    : undefined
+                            }
+                            isRequired
+                            label="Número de documento"
+                            name="documentNumber"
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            value={formik.values.documentNumber}
+                        />
 
                         <Button
                             data-testid="profile-form-action-submit"

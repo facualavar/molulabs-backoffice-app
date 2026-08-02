@@ -11,6 +11,7 @@ import {
 
 export interface UserFormValues {
     company: AutocompleteOption | null;
+    documentNumber: string;
     email: string;
     firstname: string;
     lastname: string;
@@ -20,6 +21,7 @@ export interface UserFormValues {
 
 export const emptyUserFormValues: UserFormValues = {
     company: null,
+    documentNumber: '',
     email: '',
     firstname: '',
     lastname: '',
@@ -32,6 +34,7 @@ export const buildValidationSchema = (isPasswordRequired: boolean, isCompanySele
         company: isCompanySelectable
             ? Yup.object().nullable().required('La empresa es obligatoria')
             : Yup.object().nullable(),
+        documentNumber: Yup.string().required('El número de documento es obligatorio'),
         email: Yup.string()
             .matches(REGEX_EMAIL, 'Ingresá un email válido')
             .max(EMAIL_MAX_LENGTH)

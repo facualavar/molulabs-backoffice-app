@@ -5,7 +5,7 @@ import { Form, Formik } from 'formik';
 
 import { useCompanies, useCurrentUser } from '@/hooks';
 
-import { Autocomplete, Button, Input, Select, Stack, Text } from '@/components/ui';
+import { Autocomplete, Button, Input, Select, Stack } from '@/components/ui';
 
 import {
     EMAIL_MAX_LENGTH,
@@ -105,6 +105,21 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
                             value={formik.values.email}
                         />
 
+                        <Input
+                            data-testid="user-form-input-document-number"
+                            error={
+                                formik.touched.documentNumber
+                                    ? formik.errors.documentNumber
+                                    : undefined
+                            }
+                            isRequired
+                            label="Número de documento"
+                            name="documentNumber"
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            value={formik.values.documentNumber}
+                        />
+
                         {isPasswordRequired ? (
                             <Input
                                 data-testid="user-form-input-password"
@@ -152,12 +167,6 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
                             placeholder="Seleccioná un rol"
                             value={formik.values.role}
                         />
-
-                        {errors && !errors.fields ? (
-                            <Text role="alert" variant="error">
-                                {errors.message}
-                            </Text>
-                        ) : null}
 
                         <Button
                             data-testid="user-form-action-submit"

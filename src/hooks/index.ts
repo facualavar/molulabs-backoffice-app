@@ -11,6 +11,7 @@ export { useDownloadExportFile } from './useDownloadExportFile.hook';
 export { useExportJob } from './useExportJob.hook';
 export { useMyCompany } from './useMyCompany.hook';
 export { useNameSearch } from './useNameSearch.hook';
+export { useProfile } from './useProfile.hook';
 export { useUpdateCompany } from './useUpdateCompany.hook';
 export { useUpdateMyCompany } from './useUpdateMyCompany.hook';
 export { useUpdatePassword } from './useUpdatePassword.hook';

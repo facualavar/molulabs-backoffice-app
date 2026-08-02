@@ -7,4 +7,6 @@ export { RowActions } from './RowActions/RowActions.component';
 export type { RowAction } from './RowActions/RowActions.component';
 export { Select } from './Select/Select.component';
 export { Text } from './Text/Text.component';
+export { Toaster } from './Toast/Toast.component';
+export { toast } from 'sonner';
 export { Box, Flex, Stack } from 'styled-system/jsx';

@@ -10,4 +10,5 @@ export interface CurrentUser {
 
 export interface User extends CurrentUser {
     company: Pick<Company, 'id' | 'name'>;
+    documentNumber: string;
 }

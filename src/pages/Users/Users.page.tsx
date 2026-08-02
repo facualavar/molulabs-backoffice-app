@@ -1,12 +1,15 @@
+import { useEffect, useState } from 'react';
+
 import { useNavigate, useSearchParams } from 'react-router';
 
 import { useDeleteUser, useNameSearch, useUsers } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Button, Input, Pagination, Select, Text } from '@/components/ui';
+import { Box, Button, Input, Pagination, Select, Text, toast } from '@/components/ui';
 
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
+import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
 import type { User } from '@/domain/models/user.model';
 import { SUPERADMIN_ROLE, USER_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
 
@@ -23,6 +26,8 @@ export const UsersPage = () => {
     const { nameFilter, nameInput, page, setNameInput, setPage } = useNameSearch();
     const [searchParams, setSearchParams] = useSearchParams();
     const roleFilter = searchParams.get('role') ?? '';
+    const documentNumberFilter = searchParams.get('documentNumber') ?? '';
+    const [documentNumberInput, setDocumentNumberInput] = useState(documentNumberFilter);
 
     const handleRoleChange = (value: string) => {
         setSearchParams((previous) => {
@@ -39,7 +44,30 @@ export const UsersPage = () => {
         });
     };
 
+    useEffect(() => {
+        if (documentNumberInput === documentNumberFilter) return;
+        if (documentNumberInput.length > 0 && documentNumberInput.length < MIN_SEARCH_CHARS) return;
+
+        const timeout = setTimeout(() => {
+            setSearchParams((previous) => {
+                const next = new URLSearchParams(previous);
+
+                if (documentNumberInput) {
+                    next.set('documentNumber', documentNumberInput);
+                } else {
+                    next.delete('documentNumber');
+                }
+                next.set('page', String(DEFAULT_PAGE));
+
+                return next;
+            });
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [documentNumberFilter, documentNumberInput, setSearchParams]);
+
     const { data, isFetching, isLoading } = useUsers({
+        documentNumber: documentNumberFilter || undefined,
         limit: DEFAULT_ITEMS_PER_PAGE,
         name: nameFilter || undefined,
         page,
@@ -51,7 +79,10 @@ export const UsersPage = () => {
         const confirmed = window.confirm(`¿Eliminar a ${user.firstname} ${user.lastname}?`);
 
         if (confirmed) {
-            deleteUser(user.id);
+            deleteUser(user.id, {
+                onError: () => toast.error('No se pudo eliminar el usuario'),
+                onSuccess: () => toast.success('Usuario eliminado correctamente')
+            });
         }
     };
 
@@ -95,6 +126,15 @@ export const UsersPage = () => {
                         options={ROLE_FILTER_OPTIONS}
                         placeholder="Todos los roles"
                         value={roleFilter}
+                    />
+                </Box>
+                <Box maxWidth="220px" width="100%">
+                    <Input
+                        data-testid="users-filter-input-document-number"
+                        label="N° de documento"
+                        onChange={(event) => setDocumentNumberInput(event.target.value)}
+                        placeholder="Buscar por documento..."
+                        value={documentNumberInput}
                     />
                 </Box>
             </Box>

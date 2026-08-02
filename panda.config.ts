@@ -43,6 +43,7 @@ export default defineConfig({
                     border: { value: '{colors.gray.300}' },
                     danger: { value: '{colors.red.600}' },
                     primary: { value: '{colors.blue.600}' },
+                    success: { value: '{colors.green.600}' },
                     sidenav: {
                         bg: { value: '{colors.gray.900}' },
                         border: { value: '{colors.gray.800}' },

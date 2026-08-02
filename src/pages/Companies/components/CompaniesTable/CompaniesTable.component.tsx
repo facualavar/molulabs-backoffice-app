@@ -3,6 +3,7 @@ import { css } from 'styled-system/css';
 
 import { Box, RowActions } from '@/components/ui';
 
+import { DOCUMENT_TYPE_LABEL } from '@/domain/models/company.model';
 import type { Company } from '@/domain/models/company.model';
 
 import { getCompanyEditPath } from '../../companies.helper';
@@ -62,6 +63,9 @@ export const CompaniesTable = ({ companies, onDelete }: CompaniesTableProps) => 
                 <tr>
                     <th className={headCellClass}>Nombre</th>
                     <th className={headCellClass}>Correo</th>
+                    <th className={headCellClass}>Teléfono</th>
+                    <th className={headCellClass}>Tipo doc.</th>
+                    <th className={headCellClass}>N° documento</th>
                     <th className={headCellClass}>Fecha de alta</th>
                     <th className={headCellClass}>
                         <span className={visuallyHiddenClass}>Acciones</span>
@@ -73,6 +77,11 @@ export const CompaniesTable = ({ companies, onDelete }: CompaniesTableProps) => 
                     <tr key={company.id}>
                         <td className={cellClass}>{company.name}</td>
                         <td className={cellClass}>{company.email}</td>
+                        <td className={cellClass}>{company.phone}</td>
+                        <td className={cellClass}>
+                            {DOCUMENT_TYPE_LABEL[company.documentType] ?? company.documentType}
+                        </td>
+                        <td className={cellClass}>{company.documentNumber}</td>
                         <td className={cellClass}>{formatDate(company.createdAt)}</td>
                         <td className={actionsCellClass}>
                             <RowActions

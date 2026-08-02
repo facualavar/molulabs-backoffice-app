@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useCompany, useUpdateCompany } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Text } from '@/components/ui';
+import { Box, Text, toast } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { toSerializableError } from '@/domain/models/error.model';
@@ -24,7 +24,13 @@ export const CompanyEditPage = () => {
     const handleSubmit = (values: CompanyFormValues) => {
         mutate(
             { id: company.id, payload: values },
-            { onSuccess: () => navigate(PRIVATE_ROUTES.COMPANIES) }
+            {
+                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onSuccess: () => {
+                    toast.success('Empresa actualizada correctamente');
+                    navigate(PRIVATE_ROUTES.COMPANIES);
+                }
+            }
         );
     };
 

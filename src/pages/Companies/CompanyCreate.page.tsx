@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { useCreateCompany } from '@/hooks';
 
-import { Box, Text } from '@/components/ui';
+import { Box, Text, toast } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { toSerializableError } from '@/domain/models/error.model';
@@ -16,7 +16,13 @@ export const CompanyCreatePage = () => {
     const { error, isPending, mutate } = useCreateCompany();
 
     const handleSubmit = (values: CompanyFormValues) => {
-        mutate(values, { onSuccess: () => navigate(PRIVATE_ROUTES.COMPANIES) });
+        mutate(values, {
+            onError: (submitError) => toast.error(toSerializableError(submitError).message),
+            onSuccess: () => {
+                toast.success('Empresa creada correctamente');
+                navigate(PRIVATE_ROUTES.COMPANIES);
+            }
+        });
     };
 
     return (

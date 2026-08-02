@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useUpdateUser, useUser } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Text } from '@/components/ui';
+import { Box, Text, toast } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { toSerializableError } from '@/domain/models/error.model';
@@ -27,6 +27,7 @@ export const UserEditPage = () => {
                 id: user.id,
                 payload: {
                     companyId: values.company ? Number(values.company.id) : null,
+                    documentNumber: values.documentNumber,
                     email: values.email,
                     firstname: values.firstname,
                     lastname: values.lastname,
@@ -34,7 +35,13 @@ export const UserEditPage = () => {
                     role: values.role
                 }
             },
-            { onSuccess: () => navigate(PRIVATE_ROUTES.USERS) }
+            {
+                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onSuccess: () => {
+                    toast.success('Usuario actualizado correctamente');
+                    navigate(PRIVATE_ROUTES.USERS);
+                }
+            }
         );
     };
 
@@ -47,6 +54,7 @@ export const UserEditPage = () => {
                 errors={error ? toSerializableError(error) : null}
                 initialValues={{
                     company: { id: String(user.company.id), label: user.company.name },
+                    documentNumber: user.documentNumber,
                     email: user.email,
                     firstname: user.firstname,
                     lastname: user.lastname,

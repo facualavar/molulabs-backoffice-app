@@ -8,7 +8,8 @@ export const useUpdateProfile = () => {
     return useMutation({
         mutationFn: updateProfile,
         onSuccess: (data) => {
-            queryClient.setQueryData(['currentUser'], data);
+            queryClient.setQueryData(['profile'], data);
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] });
         }
     });
 };

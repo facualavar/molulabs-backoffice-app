@@ -9,6 +9,7 @@ export interface CompanyExportParams {
 }
 
 export interface CompanyListParams {
+    documentNumber?: string;
     limit?: number;
     name?: string;
     page?: number;

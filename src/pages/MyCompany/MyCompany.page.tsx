@@ -4,20 +4,23 @@ import type { CompanyFormValues } from '@/pages/Companies/components/CompanyForm
 import { useMyCompany, useUpdateMyCompany } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Text } from '@/components/ui';
+import { Box, Text, toast } from '@/components/ui';
 
 import { toSerializableError } from '@/domain/models/error.model';
 
 export const MyCompanyPage = () => {
     const { data: company, isLoading } = useMyCompany();
-    const { error, isPending, isSuccess, mutate } = useUpdateMyCompany();
+    const { error, isPending, mutate } = useUpdateMyCompany();
 
     if (isLoading || !company) {
         return <LoadingScreen />;
     }
 
     const handleSubmit = (values: CompanyFormValues) => {
-        mutate(values);
+        mutate(values, {
+            onError: (submitError) => toast.error(toSerializableError(submitError).message),
+            onSuccess: () => toast.success('Empresa actualizada correctamente')
+        });
     };
 
     return (
@@ -36,7 +39,6 @@ export const MyCompanyPage = () => {
                 }}
                 loading={isPending}
                 onSubmit={handleSubmit}
-                success={isSuccess}
             />
         </Box>
     );

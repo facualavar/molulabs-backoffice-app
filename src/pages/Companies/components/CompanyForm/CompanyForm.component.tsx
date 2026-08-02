@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { Button, Input, Select, Stack, Text } from '@/components/ui';
+import { Button, Input, Select, Stack } from '@/components/ui';
 
 import {
     EMAIL_MAX_LENGTH,
@@ -26,16 +26,9 @@ interface CompanyFormProps {
     initialValues: CompanyFormValues;
     loading: boolean;
     onSubmit: (values: CompanyFormValues) => void;
-    success?: boolean;
 }
 
-export const CompanyForm = ({
-    errors,
-    initialValues,
-    loading,
-    onSubmit,
-    success
-}: CompanyFormProps) => {
+export const CompanyForm = ({ errors, initialValues, loading, onSubmit }: CompanyFormProps) => {
     const formikRef = useRef<FormikProps<CompanyFormValues>>(null);
 
     useEffect(() => {
@@ -122,16 +115,6 @@ export const CompanyForm = ({
                             onChange={formik.handleChange}
                             value={formik.values.documentNumber}
                         />
-
-                        {errors && !errors.fields ? (
-                            <Text role="alert" variant="error">
-                                {errors.message}
-                            </Text>
-                        ) : null}
-
-                        {success ? (
-                            <Text variant="caption">Empresa actualizada correctamente.</Text>
-                        ) : null}
 
                         <Button
                             data-testid="company-form-action-submit"

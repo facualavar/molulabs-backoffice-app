@@ -14,9 +14,21 @@ import {
 
 interface ApiErrorBody {
     detail?: string;
-    fields?: Record<string, string>;
+    errors?: ApiFieldError[];
     message?: string;
 }
+
+interface ApiFieldError {
+    field: string;
+    message: string;
+}
+
+const toFieldsRecord = (errors?: ApiFieldError[]): Record<string, string> | undefined =>
+    errors?.reduce<Record<string, string>>((fields, { field, message }) => {
+        fields[field] = message;
+
+        return fields;
+    }, {});
 
 interface RetryableConfig extends InternalAxiosRequestConfig {
     _retry?: boolean;
@@ -54,8 +66,9 @@ api.interceptors.response.use(
     async (error: AxiosError<ApiErrorBody>) => {
         const config = error.config as RetryableConfig | undefined;
         const status = error.response?.status;
+        const isExcluded = EXCLUDED_AUTH_URL.some((url) => config?.url?.includes(url));
 
-        if (config && (status === 401 || status === 403) && !config._retry) {
+        if (config && !isExcluded && (status === 401 || status === 403) && !config._retry) {
             config._retry = true;
 
             try {
@@ -72,7 +85,11 @@ api.interceptors.response.use(
         const body = error.response?.data;
 
         return Promise.reject(
-            new ErrorResponse(body?.message ?? body?.detail ?? error.message, status, body?.fields)
+            new ErrorResponse(
+                body?.message ?? body?.detail ?? error.message,
+                status,
+                toFieldsRecord(body?.errors)
+            )
         );
     }
 );
