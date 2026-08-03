@@ -35,7 +35,15 @@ export const SidenavContent = () => {
     );
 
     return (
-        <Box display="flex" flex="1" flexDirection="column" gap="1" overflowY="auto" padding="2">
+        <Box
+            display="flex"
+            flex="1"
+            flexDirection="column"
+            gap="1"
+            overflowX="hidden"
+            overflowY="auto"
+            padding="2"
+        >
             {visibleSections.map((section) => (
                 <SidenavSection
                     isOpen={openSectionId === section.id}
