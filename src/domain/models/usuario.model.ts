@@ -13,6 +13,18 @@ export const USER_ROLE_LABEL: Record<string, string> = {
 
 export const SUPERADMIN_ROLE = 'ROLE_SUPERADMIN';
 
+export const getRoleOptions = (
+    currentUserRole?: string
+): Array<{ label: string; value: string }> => {
+    const roles: string[] = [USER_ROLE.ADMIN, USER_ROLE.USER];
+
+    if (currentUserRole === SUPERADMIN_ROLE) {
+        roles.push(SUPERADMIN_ROLE);
+    }
+
+    return roles.map((role) => ({ label: USER_ROLE_LABEL[role], value: role }));
+};
+
 export interface Usuario {
     email: string;
     firstname: string;

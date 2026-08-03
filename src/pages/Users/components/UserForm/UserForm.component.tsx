@@ -14,15 +14,10 @@ import {
 } from '@/domain/constants/form.constant';
 import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
 import type { SerializableError } from '@/domain/models/error.model';
-import { SUPERADMIN_ROLE, USER_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
+import { SUPERADMIN_ROLE, getRoleOptions } from '@/domain/models/usuario.model';
 
 import { buildValidationSchema } from './UserForm.schema';
 import type { UserFormValues } from './UserForm.schema';
-
-const ROLE_OPTIONS = [
-    { label: USER_ROLE_LABEL[USER_ROLE.ADMIN], value: USER_ROLE.ADMIN },
-    { label: USER_ROLE_LABEL[USER_ROLE.USER], value: USER_ROLE.USER }
-];
 
 interface UserFormProps {
     errors: null | SerializableError;
@@ -39,6 +34,7 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
 
     const { data: currentUser } = useCurrentUser();
     const isCompanySelectable = currentUser?.role === SUPERADMIN_ROLE;
+    const roleOptions = getRoleOptions(currentUser?.role);
 
     const { data: companiesPage, isFetching: isCompaniesFetching } = useCompanies(
         { limit: 20, name: companySearch },
@@ -163,7 +159,7 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
                             label="Rol"
                             onBlur={() => formik.setFieldTouched('role')}
                             onChange={(value) => formik.setFieldValue('role', value)}
-                            options={ROLE_OPTIONS}
+                            options={roleOptions}
                             placeholder="Seleccioná un rol"
                             value={formik.values.role}
                         />

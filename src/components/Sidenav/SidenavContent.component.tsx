@@ -6,6 +6,8 @@ import { useCurrentUser } from '@/hooks';
 
 import { Box } from '@/components/ui';
 
+import { ROLES_ROUTES } from '@/domain/constants/routes.constant';
+
 import type { SidenavSection as SidenavSectionType } from './Sidenav.config';
 import { sidenavSections } from './Sidenav.config';
 import { SidenavSection } from './SidenavSection.component';
@@ -22,10 +24,11 @@ export const SidenavContent = () => {
     const location = useLocation();
     const { data: currentUser } = useCurrentUser();
 
-    const visibleSections = sidenavSections.filter(
-        (section) =>
-            !section.roles || Boolean(currentUser && section.roles.includes(currentUser.role))
-    );
+    const visibleSections = sidenavSections.filter((section) => {
+        const roles = ROLES_ROUTES[section.basePath];
+
+        return !roles || Boolean(currentUser && roles.includes(currentUser.role));
+    });
 
     const [openSectionId, setOpenSectionId] = useState<null | string>(() =>
         findActiveSectionId(visibleSections, location.pathname)

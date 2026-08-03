@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate, useSearchParams } from 'react-router';
 
-import { useDeleteUser, useNameSearch, useUsers } from '@/hooks';
+import { useCurrentUser, useDeleteUser, useNameSearch, useUsers } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Box, Button, Input, Pagination, Select, Text, toast } from '@/components/ui';
@@ -11,18 +11,15 @@ import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/paginat
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
 import type { User } from '@/domain/models/user.model';
-import { SUPERADMIN_ROLE, USER_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
+import { getRoleOptions } from '@/domain/models/usuario.model';
 
 import { UsersExport } from './components/UsersExport';
 import { UsersTable } from './components/UsersTable';
 
-const ROLE_FILTER_OPTIONS = [USER_ROLE.ADMIN, USER_ROLE.USER, SUPERADMIN_ROLE].map((role) => ({
-    label: USER_ROLE_LABEL[role],
-    value: role
-}));
-
 export const UsersPage = () => {
     const navigate = useNavigate();
+    const { data: currentUser } = useCurrentUser();
+    const roleFilterOptions = getRoleOptions(currentUser?.role);
     const { nameFilter, nameInput, page, setNameInput, setPage } = useNameSearch();
     const [searchParams, setSearchParams] = useSearchParams();
     const roleFilter = searchParams.get('role') ?? '';
@@ -123,7 +120,7 @@ export const UsersPage = () => {
                         data-testid="users-filter-select-role"
                         label="Filtrar por rol"
                         onChange={handleRoleChange}
-                        options={ROLE_FILTER_OPTIONS}
+                        options={roleFilterOptions}
                         placeholder="Todos los roles"
                         value={roleFilter}
                     />

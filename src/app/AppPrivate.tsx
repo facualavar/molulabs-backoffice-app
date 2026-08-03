@@ -1,4 +1,5 @@
 import { CompaniesPage, CompanyCreatePage, CompanyEditPage } from '@/pages/Companies';
+import { HomePage } from '@/pages/Home';
 import { MyCompanyPage } from '@/pages/MyCompany';
 import { NotFoundPage } from '@/pages/NotFound';
 import { ChangePasswordPage, ProfilePage } from '@/pages/Profile';
@@ -9,20 +10,17 @@ import { RoleRoute } from '@/app/RoleRoute';
 
 import { AppLayout } from '@/layouts/AppLayout';
 
-import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
-import { SUPERADMIN_ROLE, USER_ROLE } from '@/domain/models/usuario.model';
-
-const ADMIN_ROLES = [USER_ROLE.ADMIN, SUPERADMIN_ROLE];
+import { PRIVATE_ROUTES, ROLES_ROUTES } from '@/domain/constants/routes.constant';
 
 export const AppPrivate = () => (
     <Routes>
         <Route element={<AppLayout />}>
-            <Route element={<div>Inicio</div>} path={PRIVATE_ROUTES.HOME} />
+            <Route element={<HomePage />} path={PRIVATE_ROUTES.HOME} />
             <Route element={<ProfilePage />} path={PRIVATE_ROUTES.PROFILE} />
             <Route element={<ChangePasswordPage />} path={PRIVATE_ROUTES.PROFILE_PASSWORD} />
             <Route
                 element={
-                    <RoleRoute roles={[SUPERADMIN_ROLE]}>
+                    <RoleRoute roles={ROLES_ROUTES[PRIVATE_ROUTES.COMPANIES]}>
                         <CompaniesPage />
                     </RoleRoute>
                 }
@@ -30,7 +28,7 @@ export const AppPrivate = () => (
             />
             <Route
                 element={
-                    <RoleRoute roles={[SUPERADMIN_ROLE]}>
+                    <RoleRoute roles={ROLES_ROUTES[PRIVATE_ROUTES.COMPANIES_NEW]}>
                         <CompanyCreatePage />
                     </RoleRoute>
                 }
@@ -38,7 +36,7 @@ export const AppPrivate = () => (
             />
             <Route
                 element={
-                    <RoleRoute roles={[SUPERADMIN_ROLE]}>
+                    <RoleRoute roles={ROLES_ROUTES[PRIVATE_ROUTES.COMPANIES_EDIT]}>
                         <CompanyEditPage />
                     </RoleRoute>
                 }
@@ -46,7 +44,7 @@ export const AppPrivate = () => (
             />
             <Route
                 element={
-                    <RoleRoute roles={ADMIN_ROLES}>
+                    <RoleRoute roles={ROLES_ROUTES[PRIVATE_ROUTES.USERS]}>
                         <UsersPage />
                     </RoleRoute>
                 }
@@ -54,7 +52,7 @@ export const AppPrivate = () => (
             />
             <Route
                 element={
-                    <RoleRoute roles={ADMIN_ROLES}>
+                    <RoleRoute roles={ROLES_ROUTES[PRIVATE_ROUTES.USERS_NEW]}>
                         <UserCreatePage />
                     </RoleRoute>
                 }
@@ -62,7 +60,7 @@ export const AppPrivate = () => (
             />
             <Route
                 element={
-                    <RoleRoute roles={ADMIN_ROLES}>
+                    <RoleRoute roles={ROLES_ROUTES[PRIVATE_ROUTES.USERS_EDIT]}>
                         <UserEditPage />
                     </RoleRoute>
                 }
@@ -70,7 +68,7 @@ export const AppPrivate = () => (
             />
             <Route
                 element={
-                    <RoleRoute roles={ADMIN_ROLES}>
+                    <RoleRoute roles={ROLES_ROUTES[PRIVATE_ROUTES.MY_COMPANY]}>
                         <MyCompanyPage />
                     </RoleRoute>
                 }
