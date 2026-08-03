@@ -22,7 +22,13 @@ export const SidenavFooter = () => {
     const { isExpanded } = useSidenav();
     const { data: currentUser } = useCurrentUser();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [wasExpanded, setWasExpanded] = useState(isExpanded);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    if (isExpanded !== wasExpanded) {
+        setWasExpanded(isExpanded);
+        if (!isExpanded) setIsMenuOpen(false);
+    }
 
     useEffect(() => {
         if (!isMenuOpen) return;
