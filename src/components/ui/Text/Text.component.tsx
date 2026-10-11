@@ -11,22 +11,24 @@ interface TextProps extends ComponentPropsWithoutRef<'p'> {
     variant?: TextVariant;
 }
 
-type TextVariant = 'body' | 'caption' | 'error' | 'heading' | 'label';
+type TextVariant = 'body' | 'caption' | 'error' | 'heading' | 'label' | 'title';
 
 const variantClass: Record<TextVariant, string> = {
     body: css({ color: 'text', fontSize: 'md' }),
     caption: css({ color: 'text.muted', fontSize: 'xs' }),
     error: css({ color: 'danger', fontSize: 'xs' }),
     heading: css({ color: 'text', fontSize: 'xl', fontWeight: 'semibold' }),
-    label: css({ color: 'text', fontSize: 'sm', fontWeight: 'medium' })
+    label: css({ color: 'text', fontSize: 'sm', fontWeight: 'medium' }),
+    title: css({ color: 'text', fontSize: '42px', fontWeight: 'semibold' })
 };
 
 const defaultTag: Record<TextVariant, ElementType> = {
     body: 'p',
     caption: 'span',
     error: 'span',
-    heading: 'h1',
-    label: 'span'
+    heading: 'span',
+    label: 'span',
+    title: 'h1'
 };
 
 export const Text = ({

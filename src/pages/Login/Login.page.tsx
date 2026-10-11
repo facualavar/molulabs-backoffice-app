@@ -22,7 +22,7 @@ export const LoginPage = () => {
 
     useEffect(() => {
         if (loginError) {
-            toast.error(loginError.message);
+            toast.error('No se pudo iniciar sesión', { description: loginError.message });
         }
     }, [loginError]);
 

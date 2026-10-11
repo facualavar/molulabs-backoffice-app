@@ -25,7 +25,10 @@ export const CompanyEditPage = () => {
         mutate(
             { id: company.id, payload: values },
             {
-                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onError: (submitError) =>
+                    toast.error('No se pudo actualizar la empresa', {
+                        description: toSerializableError(submitError).message
+                    }),
                 onSuccess: () => {
                     toast.success('Empresa actualizada correctamente');
                     navigate(PRIVATE_ROUTES.COMPANIES);
@@ -36,7 +39,7 @@ export const CompanyEditPage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="heading">
+            <Text style={{ marginBottom: '1.5rem' }} variant="title">
                 Editar empresa
             </Text>
             <CompanyForm

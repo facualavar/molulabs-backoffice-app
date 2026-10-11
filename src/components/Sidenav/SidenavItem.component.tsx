@@ -13,14 +13,22 @@ export const SidenavItem = ({ item }: SidenavItemProps) => {
 
     return (
         <Box
+            _hover={{ textDecoration: 'underline' }}
             as={Link}
-            backgroundColor={isActive ? 'sidenav.hover' : undefined}
             borderRadius="md"
             display="block"
             padding="2"
             to={item.path}
         >
-            <Text color={isActive ? 'white' : 'sidenav.textMuted'} variant="label">
+            <Text
+                color={isActive ? 'sidenav.active' : 'text'}
+                style={{
+                    fontSize: '15px',
+                    fontWeight: isActive ? 600 : 400,
+                    textDecoration: isActive ? 'underline' : undefined
+                }}
+                variant="label"
+            >
                 {item.title}
             </Text>
         </Box>

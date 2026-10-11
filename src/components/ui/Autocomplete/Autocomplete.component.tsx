@@ -17,6 +17,7 @@ interface AutocompleteProps extends Omit<
     label: string;
     loading?: boolean;
     minChars?: number;
+    onCreate?: (query: string) => void;
     onSearch: (query: string) => void;
     onSelect: (option: AutocompleteOption | null) => void;
     options: AutocompleteOption[];
@@ -31,21 +32,26 @@ const fieldClass = css({
     gap: '1',
     position: 'relative'
 });
-const labelClass = css({ color: 'text', fontSize: 'sm', fontWeight: 'medium' });
+const labelClass = css({ color: 'text.label', fontSize: 'xs', fontWeight: 'regular' });
 const inputClass = css({
-    border: '1px solid',
+    backgroundColor: 'field',
     borderColor: 'border',
     borderRadius: 'md',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: 'text',
     fontSize: 'sm',
-    padding: '2'
+    paddingX: '10px',
+    paddingY: '6px'
 });
 const inputErrorClass = css({ borderColor: 'danger' });
 const errorTextClass = css({ color: 'danger', fontSize: 'xs' });
 const dropdownClass = css({
     backgroundColor: 'white',
-    border: '1px solid',
     borderColor: 'border',
-    borderRadius: 'md',
+    borderRadius: 'lg',
+    borderStyle: 'solid',
+    borderWidth: '1px',
     boxShadow: 'lg',
     left: 0,
     marginTop: '1',
@@ -63,6 +69,12 @@ const optionClass = css({
     padding: '2'
 });
 const messageClass = css({ color: 'text.muted', fontSize: 'sm', padding: '2' });
+const createOptionClass = css({
+    borderTopColor: 'border',
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
+    color: 'primary'
+});
 
 export const Autocomplete = ({
     className,
@@ -72,6 +84,7 @@ export const Autocomplete = ({
     label,
     loading,
     minChars = 0,
+    onCreate,
     onSearch,
     onSelect,
     options,
@@ -110,7 +123,20 @@ export const Autocomplete = ({
         setIsOpen(false);
     };
 
+    const handleCreate = (name: string) => {
+        clearTimeout(blurTimeout.current);
+        onCreate?.(name);
+        setQuery('');
+        setIsOpen(false);
+    };
+
     const displayValue = isOpen ? query : (value?.label ?? '');
+    const trimmedQuery = query.trim().toLowerCase();
+    const canCreate =
+        Boolean(onCreate) &&
+        trimmedQuery.length >= Math.max(minChars, 1) &&
+        !loading &&
+        !options.some((option) => option.label.toLowerCase() === trimmedQuery);
 
     return (
         <label className={fieldClass}>
@@ -133,7 +159,7 @@ export const Autocomplete = ({
                         <div className={messageClass}>Escribí al menos {minChars} caracteres</div>
                     ) : loading ? (
                         <div className={messageClass}>Buscando...</div>
-                    ) : options.length === 0 ? (
+                    ) : options.length === 0 && !canCreate ? (
                         <div className={messageClass}>Sin resultados</div>
                     ) : (
                         options.map((option) => (
@@ -147,6 +173,15 @@ export const Autocomplete = ({
                             </div>
                         ))
                     )}
+                    {canCreate ? (
+                        <div
+                            className={cx(optionClass, createOptionClass)}
+                            onClick={() => handleCreate(query.trim())}
+                            onMouseDown={(event) => event.preventDefault()}
+                        >
+                            + Crear "{query.trim()}"
+                        </div>
+                    ) : null}
                 </div>
             ) : null}
             {error ? <span className={errorTextClass}>{error}</span> : null}

@@ -54,7 +54,10 @@ export const Sidenav = () => {
     return (
         <SidenavContext.Provider value={{ isExpanded, status, toggleFixed }}>
             <Box
-                backgroundColor="sidenav.bg"
+                backgroundColor="surface"
+                borderRightColor="sidenav.border"
+                borderRightStyle="solid"
+                borderRightWidth="1px"
                 display="flex"
                 flexDirection="column"
                 flexShrink={0}

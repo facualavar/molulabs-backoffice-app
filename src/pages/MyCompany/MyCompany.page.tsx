@@ -18,14 +18,17 @@ export const MyCompanyPage = () => {
 
     const handleSubmit = (values: CompanyFormValues) => {
         mutate(values, {
-            onError: (submitError) => toast.error(toSerializableError(submitError).message),
+            onError: (submitError) =>
+                toast.error('No se pudo actualizar la empresa', {
+                    description: toSerializableError(submitError).message
+                }),
             onSuccess: () => toast.success('Empresa actualizada correctamente')
         });
     };
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="heading">
+            <Text style={{ marginBottom: '1.5rem' }} variant="title">
                 Mi empresa
             </Text>
             <CompanyForm

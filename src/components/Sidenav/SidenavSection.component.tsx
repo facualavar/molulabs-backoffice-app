@@ -38,12 +38,11 @@ export const SidenavSection = ({ isOpen, onToggle, section }: SidenavSectionProp
                     style={{ background: 'none', border: 'none', width: '100%' }}
                     title={isExpanded ? undefined : section.title}
                 >
-                    <Icon size={20} style={{ flexShrink: 0 }} />
                     {isExpanded ? (
                         <>
                             <Text
                                 color="sidenav.text"
-                                style={{ whiteSpace: 'nowrap' }}
+                                style={{ fontSize: '15px', whiteSpace: 'nowrap' }}
                                 variant="label"
                             >
                                 {section.title}
@@ -52,27 +51,39 @@ export const SidenavSection = ({ isOpen, onToggle, section }: SidenavSectionProp
                                 {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                             </Box>
                         </>
-                    ) : null}
+                    ) : (
+                        <Icon size={20} style={{ flexShrink: 0 }} />
+                    )}
                 </Box>
             ) : (
                 <Box
+                    _hover={{ textDecoration: 'underline' }}
                     alignItems="center"
                     as={Link}
-                    backgroundColor={isBaseActive ? 'sidenav.hover' : undefined}
                     borderRadius="md"
-                    color="sidenav.text"
+                    color={isBaseActive ? 'sidenav.active' : 'sidenav.text'}
                     display="flex"
                     gap="3"
                     padding="2"
                     title={isExpanded ? undefined : section.title}
                     to={section.basePath}
                 >
-                    <Icon size={20} style={{ flexShrink: 0 }} />
                     {isExpanded ? (
-                        <Text color="sidenav.text" style={{ whiteSpace: 'nowrap' }} variant="label">
+                        <Text
+                            color={isBaseActive ? 'sidenav.active' : 'sidenav.text'}
+                            style={{
+                                fontSize: '15px',
+                                fontWeight: isBaseActive ? 600 : 400,
+                                textDecoration: isBaseActive ? 'underline' : undefined,
+                                whiteSpace: 'nowrap'
+                            }}
+                            variant="label"
+                        >
                             {section.title}
                         </Text>
-                    ) : null}
+                    ) : (
+                        <Icon size={20} style={{ flexShrink: 0 }} />
+                    )}
                 </Box>
             )}
 

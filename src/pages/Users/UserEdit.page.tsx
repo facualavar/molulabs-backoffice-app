@@ -36,7 +36,10 @@ export const UserEditPage = () => {
                 }
             },
             {
-                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onError: (submitError) =>
+                    toast.error('No se pudo actualizar el usuario', {
+                        description: toSerializableError(submitError).message
+                    }),
                 onSuccess: () => {
                     toast.success('Usuario actualizado correctamente');
                     navigate(PRIVATE_ROUTES.USERS);
@@ -47,7 +50,7 @@ export const UserEditPage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="heading">
+            <Text style={{ marginBottom: '1.5rem' }} variant="title">
                 Editar usuario
             </Text>
             <UserForm

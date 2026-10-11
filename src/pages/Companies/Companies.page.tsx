@@ -11,6 +11,7 @@ import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/paginat
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
 import type { Company } from '@/domain/models/company.model';
+import { toSerializableError } from '@/domain/models/error.model';
 
 import { CompaniesExport } from './components/CompaniesExport';
 import { CompaniesTable } from './components/CompaniesTable';
@@ -57,7 +58,10 @@ export const CompaniesPage = () => {
 
         if (confirmed) {
             deleteCompany(company.id, {
-                onError: () => toast.error('No se pudo eliminar la empresa'),
+                onError: (deleteError) =>
+                    toast.error('No se pudo eliminar la empresa', {
+                        description: toSerializableError(deleteError).message
+                    }),
                 onSuccess: () => toast.success('Empresa eliminada correctamente')
             });
         }
@@ -70,7 +74,7 @@ export const CompaniesPage = () => {
     return (
         <Box>
             <Box alignItems="center" display="flex" justifyContent="space-between" marginBottom="6">
-                <Text variant="heading">Empresas</Text>
+                <Text variant="title">Empresas</Text>
                 <Box alignItems="center" display="flex" gap="3">
                     <CompaniesExport key={nameFilter} name={nameFilter || undefined} />
                     <Button
@@ -108,7 +112,6 @@ export const CompaniesPage = () => {
                 currentPage={data.meta.page}
                 disabled={isFetching}
                 onPageChange={setPage}
-                resultsPerPage={data.meta.limit}
                 totalItems={data.meta.total}
                 totalPages={data.meta.totalPages}
             />

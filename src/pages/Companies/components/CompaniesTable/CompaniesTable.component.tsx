@@ -14,30 +14,31 @@ interface CompaniesTableProps {
 }
 
 const tableClass = css({ borderCollapse: 'collapse', width: '100%' });
+const headRowClass = css({
+    borderBottomColor: 'border',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px'
+});
+const rowClass = css({
+    borderBottomColor: 'borderMuted',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px'
+});
 const headCellClass = css({
-    borderBottom: '1px solid',
-    borderColor: 'border',
     color: 'text.muted',
-    fontSize: 'xs',
-    fontWeight: 'medium',
-    padding: '3',
+    fontSize: '11px',
+    fontWeight: 'bold',
+    letterSpacing: '0.88px',
+    padding: '10px',
     textAlign: 'left',
     textTransform: 'uppercase'
 });
-const cellClass = css({
-    borderBottom: '1px solid',
-    borderColor: 'border',
-    color: 'text',
-    fontSize: 'sm',
-    padding: '3'
-});
+const cellClass = css({ color: 'text', fontSize: 'sm', padding: '10px' });
 const actionsCellClass = css({
     alignItems: 'center',
-    borderBottom: '1px solid',
-    borderColor: 'border',
     display: 'flex',
     justifyContent: 'flex-end',
-    padding: '3'
+    padding: '10px'
 });
 const visuallyHiddenClass = css({
     border: '0',
@@ -60,7 +61,7 @@ export const CompaniesTable = ({ companies, onDelete }: CompaniesTableProps) => 
     <Box overflowX="auto">
         <table className={tableClass}>
             <thead>
-                <tr>
+                <tr className={headRowClass}>
                     <th className={headCellClass}>Nombre</th>
                     <th className={headCellClass}>Correo</th>
                     <th className={headCellClass}>Teléfono</th>
@@ -74,7 +75,7 @@ export const CompaniesTable = ({ companies, onDelete }: CompaniesTableProps) => 
             </thead>
             <tbody>
                 {companies.map((company) => (
-                    <tr key={company.id}>
+                    <tr className={rowClass} key={company.id}>
                         <td className={cellClass}>{company.name}</td>
                         <td className={cellClass}>{company.email}</td>
                         <td className={cellClass}>{company.phone}</td>

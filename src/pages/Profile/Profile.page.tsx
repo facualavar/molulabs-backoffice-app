@@ -18,14 +18,17 @@ export const ProfilePage = () => {
 
     const handleSubmit = (values: ProfileFormValues) => {
         mutate(values, {
-            onError: (submitError) => toast.error(toSerializableError(submitError).message),
+            onError: (submitError) =>
+                toast.error('No se pudo actualizar el perfil', {
+                    description: toSerializableError(submitError).message
+                }),
             onSuccess: () => toast.success('Perfil actualizado correctamente')
         });
     };
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="heading">
+            <Text style={{ marginBottom: '1.5rem' }} variant="title">
                 Mi perfil
             </Text>
             <ProfileForm

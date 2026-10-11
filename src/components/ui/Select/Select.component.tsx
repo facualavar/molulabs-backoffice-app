@@ -28,21 +28,23 @@ const fieldClass = css({
     gap: '1',
     position: 'relative'
 });
-const labelClass = css({ color: 'text', fontSize: 'sm', fontWeight: 'medium' });
+const labelClass = css({ color: 'text.label', fontSize: 'xs', fontWeight: 'regular' });
 const triggerClass = css({
     _disabled: { cursor: 'not-allowed', opacity: 0.7 },
     alignItems: 'center',
-    backgroundColor: 'transparent',
-    border: '1px solid',
+    backgroundColor: 'field',
     borderColor: 'border',
     borderRadius: 'md',
+    borderStyle: 'solid',
+    borderWidth: '1px',
     color: 'text',
     cursor: 'pointer',
     display: 'flex',
     fontFamily: 'main',
     fontSize: 'sm',
     justifyContent: 'space-between',
-    padding: '2',
+    paddingX: '10px',
+    paddingY: '6px',
     textAlign: 'left',
     width: '100%'
 });
@@ -51,9 +53,10 @@ const placeholderClass = css({ color: 'text.muted' });
 const chevronClass = css({ color: 'text.muted', flexShrink: 0 });
 const panelClass = css({
     backgroundColor: 'white',
-    border: '1px solid',
     borderColor: 'border',
-    borderRadius: 'md',
+    borderRadius: 'lg',
+    borderStyle: 'solid',
+    borderWidth: '1px',
     boxShadow: 'lg',
     left: 0,
     marginTop: '1',

@@ -10,6 +10,7 @@ import { Box, Button, Input, Pagination, Select, Text, toast } from '@/component
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
+import { toSerializableError } from '@/domain/models/error.model';
 import type { User } from '@/domain/models/user.model';
 import { getRoleOptions } from '@/domain/models/usuario.model';
 
@@ -77,7 +78,10 @@ export const UsersPage = () => {
 
         if (confirmed) {
             deleteUser(user.id, {
-                onError: () => toast.error('No se pudo eliminar el usuario'),
+                onError: (deleteError) =>
+                    toast.error('No se pudo eliminar el usuario', {
+                        description: toSerializableError(deleteError).message
+                    }),
                 onSuccess: () => toast.success('Usuario eliminado correctamente')
             });
         }
@@ -90,7 +94,7 @@ export const UsersPage = () => {
     return (
         <Box>
             <Box alignItems="center" display="flex" justifyContent="space-between" marginBottom="6">
-                <Text variant="heading">Usuarios</Text>
+                <Text variant="title">Usuarios</Text>
                 <Box alignItems="center" display="flex" gap="3">
                     <UsersExport
                         key={`${nameFilter}-${roleFilter}`}
@@ -142,7 +146,6 @@ export const UsersPage = () => {
                 currentPage={data.meta.page}
                 disabled={isFetching}
                 onPageChange={setPage}
-                resultsPerPage={data.meta.limit}
                 totalItems={data.meta.total}
                 totalPages={data.meta.totalPages}
             />

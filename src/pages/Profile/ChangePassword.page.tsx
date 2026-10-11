@@ -17,7 +17,10 @@ export const ChangePasswordPage = () => {
                 newPassword: values.newPassword
             },
             {
-                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onError: (submitError) =>
+                    toast.error('No se pudo actualizar la contraseña', {
+                        description: toSerializableError(submitError).message
+                    }),
                 onSuccess: () => toast.success('Contraseña actualizada correctamente')
             }
         );
@@ -25,7 +28,7 @@ export const ChangePasswordPage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="heading">
+            <Text style={{ marginBottom: '1.5rem' }} variant="title">
                 Actualizar contraseña
             </Text>
             <UpdatePasswordForm

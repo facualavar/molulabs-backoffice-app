@@ -27,7 +27,10 @@ export const UserCreatePage = () => {
                 role: values.role
             },
             {
-                onError: (submitError) => toast.error(toSerializableError(submitError).message),
+                onError: (submitError) =>
+                    toast.error('No se pudo crear el usuario', {
+                        description: toSerializableError(submitError).message
+                    }),
                 onSuccess: () => {
                     toast.success('Usuario creado correctamente');
                     navigate(PRIVATE_ROUTES.USERS);
@@ -38,7 +41,7 @@ export const UserCreatePage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="heading">
+            <Text style={{ marginBottom: '1.5rem' }} variant="title">
                 Nuevo usuario
             </Text>
             <UserForm

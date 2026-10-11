@@ -26,8 +26,10 @@ export const PublicLayout = () => (
             <Box
                 alignItems="center"
                 aspectRatio="3 / 5"
-                border="14px solid #15bdf5"
+                borderColor="primary"
                 borderRadius="80px"
+                borderStyle="solid"
+                borderWidth="14px"
                 boxShadow="lg"
                 display="flex"
                 flexDirection="column"

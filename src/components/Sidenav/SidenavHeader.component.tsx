@@ -1,4 +1,4 @@
-import { Pin, PinOff } from 'lucide-react';
+import { ChevronsLeft, LayoutGrid } from 'lucide-react';
 
 import { Box, Text } from '@/components/ui';
 
@@ -14,17 +14,17 @@ export const SidenavHeader = () => {
     return (
         <Box
             alignItems="center"
-            borderBottom="1px solid"
-            borderColor="sidenav.border"
             display="flex"
             gap="3"
             justifyContent="space-between"
-            padding="4"
+            paddingBottom="4"
+            paddingTop="30px"
+            paddingX="20px"
         >
             <Box alignItems="center" display="flex" gap="3" minWidth="0">
                 <img alt="Backoffice" src={logo} style={{ flexShrink: 0, width: '28px' }} />
                 {isExpanded ? (
-                    <Text color="white" style={{ whiteSpace: 'nowrap' }} variant="label">
+                    <Text as="span" style={{ whiteSpace: 'nowrap' }} variant="heading">
                         Backoffice
                     </Text>
                 ) : null}
@@ -41,7 +41,7 @@ export const SidenavHeader = () => {
                     onClick={toggleFixed}
                     style={{ background: 'none', border: 'none', flexShrink: 0, padding: 0 }}
                 >
-                    {isFixed ? <PinOff size={16} /> : <Pin size={16} />}
+                    {isFixed ? <ChevronsLeft size={16} /> : <LayoutGrid size={16} />}
                 </Box>
             ) : null}
         </Box>

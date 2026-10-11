@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { KeyRound, LogOut, MoreVertical, UserCog } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 import type { AppDispatch } from '@/app/store';
 
@@ -18,7 +18,6 @@ import { useSidenav } from './Sidenav.context';
 
 export const SidenavFooter = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
     const { isExpanded } = useSidenav();
     const { data: currentUser } = useCurrentUser();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,89 +48,79 @@ export const SidenavFooter = () => {
         dispatch(logoutThunk());
     };
 
-    const handleEditUser = () => {
-        setIsMenuOpen(false);
-        navigate(PRIVATE_ROUTES.PROFILE);
-    };
-
-    const handleChangePassword = () => {
-        setIsMenuOpen(false);
-        navigate(PRIVATE_ROUTES.PROFILE_PASSWORD);
-    };
+    const closeMenu = () => setIsMenuOpen(false);
 
     const fullName = currentUser ? `${currentUser.firstname} ${currentUser.lastname}` : '';
 
     return (
         <Box
-            borderColor="sidenav.border"
-            borderTop="1px solid"
-            padding="4"
+            borderTopColor="sidenav.border"
+            borderTopStyle="solid"
+            borderTopWidth="1px"
+            paddingBottom="30px"
+            paddingTop="4"
+            paddingX="20px"
             position="relative"
             ref={containerRef}
         >
             {isMenuOpen ? (
                 <Box
-                    backgroundColor="sidenav.hover"
-                    border="1px solid"
-                    borderColor="sidenav.hover"
-                    borderRadius="md"
+                    backgroundColor="divider"
+                    borderColor="sidenav.border"
+                    borderRadius="lg"
+                    borderStyle="solid"
+                    borderWidth="1px"
                     bottom="100%"
                     boxShadow="lg"
-                    left="4"
+                    left="20px"
                     marginBottom="2"
                     overflow="hidden"
                     position="absolute"
-                    right="4"
+                    right="20px"
                     zIndex="10"
                 >
                     <Box
-                        _hover={{ backgroundColor: 'white/10' }}
+                        _hover={{ backgroundColor: 'sidenav.hover' }}
                         alignItems="center"
                         as="button"
+                        backgroundColor="transparent"
+                        border="none"
                         color="danger"
                         cursor="pointer"
                         display="flex"
-                        gap="3"
                         onClick={handleLogout}
                         padding="3"
-                        style={{ background: 'none', border: 'none', width: '100%' }}
+                        width="100%"
                     >
-                        <LogOut size={16} style={{ flexShrink: 0 }} />
                         <Text color="danger" variant="label">
                             Cerrar sesión
                         </Text>
                     </Box>
-                    <Box backgroundColor="gray.600" height="1px" marginX="3" marginY="1" />
+                    <Box backgroundColor="sidenav.border" height="1px" marginX="3" marginY="1" />
                     <Box
-                        _hover={{ backgroundColor: 'white/10' }}
+                        _hover={{ backgroundColor: 'sidenav.hover' }}
                         alignItems="center"
-                        as="button"
+                        as={Link}
                         color="sidenav.text"
-                        cursor="pointer"
                         display="flex"
-                        gap="3"
-                        onClick={handleEditUser}
+                        onClick={closeMenu}
                         padding="3"
-                        style={{ background: 'none', border: 'none', width: '100%' }}
+                        to={PRIVATE_ROUTES.PROFILE}
                     >
-                        <UserCog size={16} style={{ flexShrink: 0 }} />
                         <Text color="sidenav.text" variant="label">
                             Configurar usuario
                         </Text>
                     </Box>
                     <Box
-                        _hover={{ backgroundColor: 'white/10' }}
+                        _hover={{ backgroundColor: 'sidenav.hover' }}
                         alignItems="center"
-                        as="button"
+                        as={Link}
                         color="sidenav.text"
-                        cursor="pointer"
                         display="flex"
-                        gap="3"
-                        onClick={handleChangePassword}
+                        onClick={closeMenu}
                         padding="3"
-                        style={{ background: 'none', border: 'none', width: '100%' }}
+                        to={PRIVATE_ROUTES.PROFILE_PASSWORD}
                     >
-                        <KeyRound size={16} style={{ flexShrink: 0 }} />
                         <Text color="sidenav.text" variant="label">
                             Cambiar mi contraseña
                         </Text>
@@ -157,7 +146,7 @@ export const SidenavFooter = () => {
                     aria-label="Acciones de usuario"
                     as="button"
                     borderRadius="md"
-                    color="sidenav.textMuted"
+                    color="sidenav.text"
                     cursor="pointer"
                     display="flex"
                     flexShrink={0}
@@ -167,7 +156,7 @@ export const SidenavFooter = () => {
                     style={{ background: 'none', border: 'none' }}
                     title="Acciones de usuario"
                 >
-                    <MoreVertical size={20} style={{ flexShrink: 0 }} />
+                    <MoreHorizontal size={20} style={{ flexShrink: 0 }} />
                 </Box>
             </Box>
         </Box>

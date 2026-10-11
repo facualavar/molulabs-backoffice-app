@@ -10,13 +10,17 @@ interface InputProps extends Omit<ComponentPropsWithoutRef<'input'>, 'value'> {
 }
 
 const fieldClass = css({ display: 'flex', flexDirection: 'column', gap: '1' });
-const labelClass = css({ color: 'text', fontSize: 'sm', fontWeight: 'medium' });
+const labelClass = css({ color: 'text.label', fontSize: 'xs', fontWeight: 'regular' });
 const inputClass = css({
-    border: '1px solid',
+    backgroundColor: 'field',
     borderColor: 'border',
     borderRadius: 'md',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    color: 'text',
     fontSize: 'sm',
-    padding: '2'
+    paddingX: '10px',
+    paddingY: '6px'
 });
 const inputErrorClass = css({ borderColor: 'danger' });
 const errorTextClass = css({ color: 'danger', fontSize: 'xs' });

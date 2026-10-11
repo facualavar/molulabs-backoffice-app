@@ -3,7 +3,7 @@ import { css } from 'styled-system/css';
 
 import { useCurrentUser } from '@/hooks';
 
-import { Box, RowActions } from '@/components/ui';
+import { Badge, Box, RowActions } from '@/components/ui';
 
 import type { User } from '@/domain/models/user.model';
 import { SUPERADMIN_ROLE, USER_ROLE_LABEL } from '@/domain/models/usuario.model';
@@ -16,30 +16,31 @@ interface UsersTableProps {
 }
 
 const tableClass = css({ borderCollapse: 'collapse', width: '100%' });
+const headRowClass = css({
+    borderBottomColor: 'border',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px'
+});
+const rowClass = css({
+    borderBottomColor: 'borderMuted',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px'
+});
 const headCellClass = css({
-    borderBottom: '1px solid',
-    borderColor: 'border',
     color: 'text.muted',
-    fontSize: 'xs',
-    fontWeight: 'medium',
-    padding: '3',
+    fontSize: '11px',
+    fontWeight: 'bold',
+    letterSpacing: '0.88px',
+    padding: '10px',
     textAlign: 'left',
     textTransform: 'uppercase'
 });
-const cellClass = css({
-    borderBottom: '1px solid',
-    borderColor: 'border',
-    color: 'text',
-    fontSize: 'sm',
-    padding: '3'
-});
+const cellClass = css({ color: 'text', fontSize: 'sm', padding: '10px' });
 const actionsCellClass = css({
     alignItems: 'center',
-    borderBottom: '1px solid',
-    borderColor: 'border',
     display: 'flex',
     justifyContent: 'flex-end',
-    padding: '3'
+    padding: '10px'
 });
 const visuallyHiddenClass = css({
     border: '0',
@@ -59,7 +60,7 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => {
         <Box overflowX="auto">
             <table className={tableClass}>
                 <thead>
-                    <tr>
+                    <tr className={headRowClass}>
                         <th className={headCellClass}>Nombre</th>
                         <th className={headCellClass}>Apellido</th>
                         <th className={headCellClass}>Correo</th>
@@ -73,7 +74,7 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => {
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user.id}>
+                        <tr className={rowClass} key={user.id}>
                             <td className={cellClass}>{user.firstname}</td>
                             <td className={cellClass}>{user.lastname}</td>
                             <td className={cellClass}>{user.email}</td>
@@ -81,7 +82,9 @@ export const UsersTable = ({ onDelete, users }: UsersTableProps) => {
                             {isSuperAdmin ? (
                                 <td className={cellClass}>{user.company.name}</td>
                             ) : null}
-                            <td className={cellClass}>{USER_ROLE_LABEL[user.role] ?? user.role}</td>
+                            <td className={cellClass}>
+                                <Badge>{USER_ROLE_LABEL[user.role] ?? user.role}</Badge>
+                            </td>
                             <td className={actionsCellClass}>
                                 <RowActions
                                     actions={[

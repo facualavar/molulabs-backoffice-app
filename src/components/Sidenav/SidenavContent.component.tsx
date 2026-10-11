@@ -42,7 +42,8 @@ export const SidenavContent = () => {
             gap="1"
             overflowX="hidden"
             overflowY="auto"
-            padding="2"
+            paddingX="12px"
+            paddingY="2"
         >
             {visibleSections.map((section) => (
                 <SidenavSection

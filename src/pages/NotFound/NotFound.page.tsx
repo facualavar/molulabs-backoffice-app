@@ -13,15 +13,15 @@ export const NotFoundPage = () => (
         paddingTop="20"
         textAlign="center"
     >
-        <Text variant="heading">404</Text>
+        <Text variant="title">404</Text>
         <Text variant="body">La página que buscás no existe.</Text>
         <Box
             as={Link}
             backgroundColor="primary"
             borderRadius="md"
-            color="white"
+            color="onPrimary"
             fontSize="sm"
-            fontWeight="medium"
+            fontWeight="semibold"
             padding="2"
             to={PRIVATE_ROUTES.HOME}
         >

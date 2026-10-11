@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import type { LucideIcon } from 'lucide-react';
-import { MoreVertical } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router';
 import { css, cx } from 'styled-system/css';
@@ -36,9 +36,10 @@ const triggerClass = css({
 });
 const panelClass = css({
     backgroundColor: 'white',
-    border: '1px solid',
     borderColor: 'border',
-    borderRadius: 'md',
+    borderRadius: 'lg',
+    borderStyle: 'solid',
+    borderWidth: '1px',
     boxShadow: 'lg',
     minWidth: '160px',
     overflow: 'hidden',
@@ -122,7 +123,7 @@ export const RowActions = ({ actions, label }: RowActionsProps) => {
                 ref={triggerRef}
                 type="button"
             >
-                <MoreVertical size={16} />
+                <MoreHorizontal size={16} />
             </button>
             {isOpen && position
                 ? createPortal(

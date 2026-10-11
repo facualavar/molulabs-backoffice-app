@@ -18,10 +18,13 @@ const buttonClass = css({
     _disabled: { cursor: 'not-allowed', opacity: 0.7 },
     alignItems: 'center',
     borderRadius: 'md',
+    borderStyle: 'solid',
+    borderWidth: '1px',
     cursor: 'pointer',
     display: 'flex',
-    fontWeight: 'medium',
-    justifyContent: 'center'
+    fontWeight: 'semibold',
+    justifyContent: 'center',
+    lineHeight: '1.2'
 });
 
 const sizeClass: Record<ButtonSize, string> = {
@@ -39,13 +42,8 @@ const iconSizeClass: Record<ButtonSize, string> = {
 };
 
 const variantClass: Record<ButtonVariant, string> = {
-    primary: css({ backgroundColor: 'primary', border: 'none', color: 'white' }),
-    secondary: css({
-        backgroundColor: 'surface',
-        border: '1px solid',
-        borderColor: 'border',
-        color: 'text'
-    })
+    primary: css({ backgroundColor: 'primary', borderColor: 'transparent', color: 'onPrimary' }),
+    secondary: css({ backgroundColor: 'transparent', borderColor: 'border', color: 'text' })
 };
 
 const fullWidthClass = css({ width: '100%' });

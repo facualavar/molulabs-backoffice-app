@@ -17,7 +17,10 @@ export const CompanyCreatePage = () => {
 
     const handleSubmit = (values: CompanyFormValues) => {
         mutate(values, {
-            onError: (submitError) => toast.error(toSerializableError(submitError).message),
+            onError: (submitError) =>
+                toast.error('No se pudo crear la empresa', {
+                    description: toSerializableError(submitError).message
+                }),
             onSuccess: () => {
                 toast.success('Empresa creada correctamente');
                 navigate(PRIVATE_ROUTES.COMPANIES);
@@ -27,7 +30,7 @@ export const CompanyCreatePage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="heading">
+            <Text style={{ marginBottom: '1.5rem' }} variant="title">
                 Nueva empresa
             </Text>
             <CompanyForm
