@@ -7,7 +7,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-    globalIgnores(['dist', 'node_modules', '*.config.ts', 'styled-system']),
+    globalIgnores(['dist', 'node_modules', '.pnpm-store', '*.config.ts', 'styled-system']),
     {
         files: ['**/*.{ts,tsx}'],
         extends: [

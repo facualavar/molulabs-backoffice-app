@@ -16,9 +16,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "paths": {
-            "@/*": ["./src/*"],
-            // @molulabs/ds is linked from outside the app: its .d.ts must see the app's React types
-            "react": ["./node_modules/@types/react"]
+            "@/*": ["./src/*"]
         },
 
         "skipLibCheck": true,

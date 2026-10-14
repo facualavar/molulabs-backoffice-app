@@ -8,9 +8,7 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, './src'),
             'styled-system': path.resolve(__dirname, './styled-system')
-        },
-        // The linked @molulabs/ds has no node_modules of its own: resolve React from the app
-        dedupe: ['react', 'react-dom']
+        }
     },
     css: {
         postcss: {
@@ -21,6 +19,8 @@ export default defineConfig({
         environment: 'jsdom',
         globals: true,
         setupFiles: './src/__test__/setup',
-        css: false
+        css: false,
+        // @molulabs/ds ships .jsx sources: Vite must transform them instead of leaving them to Node
+        server: { deps: { inline: ['@molulabs/ds'] } }
     }
 });
