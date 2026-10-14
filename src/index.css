@@ -1,4 +1,8 @@
-@layer reset, base, tokens, recipes, utilities;
+@layer reset, base, ds, tokens, recipes, utilities;
+
+/* Molulabs design system: tokens (--ink, --chrome…), IBM Plex, Tabler Icons (.ti) and base styles.
+   Layered after Panda's reset/base so its body/typography wins, before utilities so css() still overrides it. */
+@import '@molulabs/ds/styles.css' layer(ds);
 
 @font-face {
     font-family: 'Source Serif 4';

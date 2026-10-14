@@ -16,6 +16,14 @@ export class ErrorResponse extends Error {
     }
 }
 
+// For toasts: the api's generic "Error en alguno de los campos" says nothing, the field messages do
+export const getErrorDescription = (error: unknown): string => {
+    const { fields, message } = toSerializableError(error);
+    const fieldMessages = Object.values(fields ?? {});
+
+    return fieldMessages.length ? fieldMessages.join(' · ') : message;
+};
+
 export const toSerializableError = (error: unknown): SerializableError => {
     if (error instanceof ErrorResponse) {
         return { fields: error.fields, message: error.message, status: error.status };

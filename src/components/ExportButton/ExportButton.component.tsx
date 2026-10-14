@@ -1,18 +1,26 @@
 import { useState } from 'react';
 
-import { useCreateCompanyExport, useDownloadExportFile, useExportJob } from '@/hooks';
+import { Button } from '@molulabs/ds';
+import { useMutation } from '@tanstack/react-query';
 
-import { Box, Button, Text } from '@/components/ui';
+import { useDownloadExportFile, useExportJob } from '@/hooks';
 
+import { Box, Text } from '@/components/ui';
+
+import type { ExportJob } from '@/domain/models/export.model';
 import { EXPORT_STATUS } from '@/domain/models/export.model';
 
-interface CompaniesExportProps {
-    name?: string;
+interface ExportButtonProps {
+    'data-testid': string;
+    /** Starts the export job with the list's current filters */
+    onExport: () => Promise<ExportJob>;
 }
 
-export const CompaniesExport = ({ name }: CompaniesExportProps) => {
+// Export button of a table toolbar: starts the job, waits for the file and then offers to download it.
+// Give it a key built from the filters so a filter change drops a file made with the old ones.
+export const ExportButton = ({ 'data-testid': testId, onExport }: ExportButtonProps) => {
     const [jobId, setJobId] = useState<null | number>(null);
-    const { isPending: isCreating, mutate: createExport } = useCreateCompanyExport();
+    const { isPending: isCreating, mutate: createExport } = useMutation({ mutationFn: onExport });
     const { data: job } = useExportJob(jobId);
     const { isPending: isDownloading, mutate: downloadFile } = useDownloadExportFile();
 
@@ -29,7 +37,7 @@ export const CompaniesExport = ({ name }: CompaniesExportProps) => {
             return;
         }
 
-        createExport({ name }, { onSuccess: (data) => setJobId(data.id) });
+        createExport(undefined, { onSuccess: (data) => setJobId(data.id) });
     };
 
     const label = isReady ? 'Descargar archivo' : isPreparing ? 'Exportando...' : 'Exportar';
@@ -37,14 +45,15 @@ export const CompaniesExport = ({ name }: CompaniesExportProps) => {
     return (
         <Box>
             <Button
-                data-testid="companies-export-action-export"
+                data-testid={testId}
                 disabled={isPreparing || isDownloading}
-                label={label}
-                loading={isPreparing}
+                icon={isReady ? 'ti-file-download' : 'ti-download'}
                 onClick={handleClick}
                 size="sm"
-                variant="secondary"
-            />
+                tone="secondary"
+            >
+                {label}
+            </Button>
             {isFailed ? (
                 <Text style={{ marginTop: '0.5rem' }} variant="error">
                     No se pudo generar el archivo. Intentá nuevamente.

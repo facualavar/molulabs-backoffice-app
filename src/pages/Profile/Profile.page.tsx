@@ -1,9 +1,11 @@
+import { PageHeader } from '@molulabs/ds';
+
 import { useProfile, useUpdateProfile } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Text, toast } from '@/components/ui';
+import { Box, toast } from '@/components/ui';
 
-import { toSerializableError } from '@/domain/models/error.model';
+import { getErrorDescription, toSerializableError } from '@/domain/models/error.model';
 
 import { ProfileForm } from './components/ProfileForm';
 import type { ProfileFormValues } from './components/ProfileForm/ProfileForm.schema';
@@ -20,7 +22,7 @@ export const ProfilePage = () => {
         mutate(values, {
             onError: (submitError) =>
                 toast.error('No se pudo actualizar el perfil', {
-                    description: toSerializableError(submitError).message
+                    description: getErrorDescription(submitError)
                 }),
             onSuccess: () => toast.success('Perfil actualizado correctamente')
         });
@@ -28,9 +30,7 @@ export const ProfilePage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="title">
-                Mi perfil
-            </Text>
+            <PageHeader sub="Datos de tu cuenta." title="Configurar mi usuario" />
             <ProfileForm
                 errors={error ? toSerializableError(error) : null}
                 initialValues={{

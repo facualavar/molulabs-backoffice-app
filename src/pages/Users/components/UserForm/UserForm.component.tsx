@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { Button } from '@molulabs/ds';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
 import { useCompanies, useCurrentUser } from '@/hooks';
 
-import { Autocomplete, Button, Input, Select, Stack } from '@/components/ui';
+import { Autocomplete, Input, Select, Stack } from '@/components/ui';
 
 import {
     EMAIL_MAX_LENGTH,
@@ -166,11 +167,11 @@ export const UserForm = ({ errors, initialValues, loading, mode, onSubmit }: Use
 
                         <Button
                             data-testid="user-form-action-submit"
-                            label={loading ? 'Guardando...' : 'Guardar'}
-                            loading={loading}
-                            size="sm"
+                            disabled={loading}
                             type="submit"
-                        />
+                        >
+                            {loading ? 'Guardando...' : 'Guardar'}
+                        </Button>
                     </Stack>
                 </Form>
             )}

@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef } from 'react';
+import { useId, useState } from 'react';
 
-import { css, cx } from 'styled-system/css';
+import { Field, controlStyle } from '@molulabs/ds';
 
 interface TextareaProps extends Omit<ComponentPropsWithoutRef<'textarea'>, 'value'> {
     error?: string;
@@ -9,31 +10,43 @@ interface TextareaProps extends Omit<ComponentPropsWithoutRef<'textarea'>, 'valu
     value: string;
 }
 
-const fieldClass = css({ display: 'flex', flexDirection: 'column', gap: '1' });
-const labelClass = css({ color: 'text.label', fontSize: 'xs', fontWeight: 'regular' });
-const textareaClass = css({
-    backgroundColor: 'field',
-    borderColor: 'border',
-    borderRadius: 'md',
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    color: 'text',
-    fontFamily: 'main',
-    fontSize: 'sm',
-    paddingX: '10px',
-    paddingY: '6px',
-    resize: 'vertical'
-});
-const textareaErrorClass = css({ borderColor: 'danger' });
-const errorTextClass = css({ color: 'danger', fontSize: 'xs' });
+export const Textarea = ({
+    disabled,
+    error,
+    id,
+    isRequired,
+    label,
+    onBlur,
+    onFocus,
+    rows = 3,
+    style,
+    ...rest
+}: TextareaProps) => {
+    const generatedId = useId();
+    const textareaId = id ?? generatedId;
+    const [focus, setFocus] = useState(false);
 
-export const Textarea = ({ className, error, isRequired, label, ...rest }: TextareaProps) => (
-    <label className={fieldClass}>
-        <span className={labelClass}>
-            {label}
-            {isRequired ? ' *' : ''}
-        </span>
-        <textarea className={cx(textareaClass, error && textareaErrorClass, className)} {...rest} />
-        {error ? <span className={errorTextClass}>{error}</span> : null}
-    </label>
-);
+    return (
+        <Field error={error} htmlFor={textareaId} label={label} required={isRequired}>
+            <textarea
+                disabled={disabled}
+                id={textareaId}
+                onBlur={(event) => {
+                    setFocus(false);
+                    onBlur?.(event);
+                }}
+                onFocus={(event) => {
+                    setFocus(true);
+                    onFocus?.(event);
+                }}
+                rows={rows}
+                style={{
+                    ...controlStyle({ disabled, focus, invalid: Boolean(error) }),
+                    resize: 'vertical',
+                    ...style
+                }}
+                {...rest}
+            />
+        </Field>
+    );
+};

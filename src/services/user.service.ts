@@ -39,6 +39,7 @@ export const updatePassword = async (payload: UpdatePasswordPayload): Promise<vo
 };
 
 export interface UserExportParams {
+    documentNumber?: string;
     name?: string;
     role?: string;
 }

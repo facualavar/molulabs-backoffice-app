@@ -1,25 +1,23 @@
 import { useEffect, useRef } from 'react';
 
+import { Button } from '@molulabs/ds';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { Button, Input, Select, Stack } from '@/components/ui';
+import { Input, Select, Stack } from '@/components/ui';
 
 import {
     EMAIL_MAX_LENGTH,
     NAME_MAX_LENGTH,
     PHONE_MAX_LENGTH
 } from '@/domain/constants/form.constant';
-import { DOCUMENT_TYPE, DOCUMENT_TYPE_LABEL } from '@/domain/models/company.model';
+import { getDocumentTypeOptions } from '@/domain/models/company.model';
 import type { SerializableError } from '@/domain/models/error.model';
 
 import { validationSchema } from './CompanyForm.schema';
 import type { CompanyFormValues } from './CompanyForm.schema';
 
-const DOCUMENT_TYPE_OPTIONS = Object.values(DOCUMENT_TYPE).map((value) => ({
-    label: DOCUMENT_TYPE_LABEL[value],
-    value
-}));
+const DOCUMENT_TYPE_OPTIONS = getDocumentTypeOptions();
 
 interface CompanyFormProps {
     errors: null | SerializableError;
@@ -118,11 +116,11 @@ export const CompanyForm = ({ errors, initialValues, loading, onSubmit }: Compan
 
                         <Button
                             data-testid="company-form-action-submit"
-                            label={loading ? 'Guardando...' : 'Guardar'}
-                            loading={loading}
-                            size="sm"
+                            disabled={loading}
                             type="submit"
-                        />
+                        >
+                            {loading ? 'Guardando...' : 'Guardar'}
+                        </Button>
                     </Stack>
                 </Form>
             )}

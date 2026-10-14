@@ -19,7 +19,13 @@ const variantClass: Record<TextVariant, string> = {
     error: css({ color: 'danger', fontSize: 'xs' }),
     heading: css({ color: 'text', fontSize: 'xl', fontWeight: 'semibold' }),
     label: css({ color: 'text', fontSize: 'sm', fontWeight: 'medium' }),
-    title: css({ color: 'text', fontSize: '42px', fontWeight: 'semibold' })
+    title: css({
+        color: 'text',
+        fontSize: 'var(--ui-title)',
+        fontWeight: 'semibold',
+        letterSpacing: 'var(--tracking-title)',
+        lineHeight: 'var(--leading-tight)'
+    })
 };
 
 const defaultTag: Record<TextVariant, ElementType> = {

@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+import { Button } from '@molulabs/ds';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { Button, Input, Stack } from '@/components/ui';
+import { Input, Stack } from '@/components/ui';
 
 import { EMAIL_MAX_LENGTH, NAME_MAX_LENGTH } from '@/domain/constants/form.constant';
 import type { SerializableError } from '@/domain/models/error.model';
@@ -94,11 +95,11 @@ export const ProfileForm = ({ errors, initialValues, loading, onSubmit }: Profil
 
                         <Button
                             data-testid="profile-form-action-submit"
-                            label={loading ? 'Guardando...' : 'Guardar cambios'}
-                            loading={loading}
-                            size="sm"
+                            disabled={loading}
                             type="submit"
-                        />
+                        >
+                            {loading ? 'Guardando...' : 'Guardar cambios'}
+                        </Button>
                     </Stack>
                 </Form>
             )}

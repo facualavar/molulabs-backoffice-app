@@ -1,8 +1,10 @@
+import { PageHeader } from '@molulabs/ds';
+
 import { useUpdatePassword } from '@/hooks';
 
-import { Box, Text, toast } from '@/components/ui';
+import { Box, toast } from '@/components/ui';
 
-import { toSerializableError } from '@/domain/models/error.model';
+import { getErrorDescription, toSerializableError } from '@/domain/models/error.model';
 
 import { UpdatePasswordForm } from './components/UpdatePasswordForm';
 import type { UpdatePasswordFormValues } from './components/UpdatePasswordForm/UpdatePasswordForm.schema';
@@ -19,7 +21,7 @@ export const ChangePasswordPage = () => {
             {
                 onError: (submitError) =>
                     toast.error('No se pudo actualizar la contraseña', {
-                        description: toSerializableError(submitError).message
+                        description: getErrorDescription(submitError)
                     }),
                 onSuccess: () => toast.success('Contraseña actualizada correctamente')
             }
@@ -28,9 +30,7 @@ export const ChangePasswordPage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="title">
-                Actualizar contraseña
-            </Text>
+            <PageHeader sub="Actualizá la contraseña de tu cuenta." title="Cambiar contraseña" />
             <UpdatePasswordForm
                 errors={error ? toSerializableError(error) : null}
                 loading={isPending}

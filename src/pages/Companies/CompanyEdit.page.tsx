@@ -1,12 +1,13 @@
+import { PageHeader } from '@molulabs/ds';
 import { useNavigate, useParams } from 'react-router';
 
 import { useCompany, useUpdateCompany } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Text, toast } from '@/components/ui';
+import { Box, toast } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
-import { toSerializableError } from '@/domain/models/error.model';
+import { getErrorDescription, toSerializableError } from '@/domain/models/error.model';
 
 import { CompanyForm } from './components/CompanyForm';
 import type { CompanyFormValues } from './components/CompanyForm/CompanyForm.schema';
@@ -27,7 +28,7 @@ export const CompanyEditPage = () => {
             {
                 onError: (submitError) =>
                     toast.error('No se pudo actualizar la empresa', {
-                        description: toSerializableError(submitError).message
+                        description: getErrorDescription(submitError)
                     }),
                 onSuccess: () => {
                     toast.success('Empresa actualizada correctamente');
@@ -39,9 +40,7 @@ export const CompanyEditPage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="title">
-                Editar empresa
-            </Text>
+            <PageHeader title="Editar empresa" />
             <CompanyForm
                 errors={error ? toSerializableError(error) : null}
                 initialValues={{

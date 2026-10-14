@@ -1,44 +1,38 @@
-import type { LucideIcon } from 'lucide-react';
-import { Briefcase, Building2, Home, Users } from 'lucide-react';
-
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
-
-export interface SidenavItem {
-    path: string;
-    title: string;
-}
 
 export interface SidenavSection {
     basePath: string;
-    icon: LucideIcon;
+    /** Tabler icon class, shown only while the menu is collapsed */
+    icon: string;
     id: string;
-    items?: SidenavItem[];
     title: string;
 }
 
 export const sidenavSections: SidenavSection[] = [
     {
         basePath: PRIVATE_ROUTES.HOME,
-        icon: Home,
+        icon: 'ti-layout-dashboard',
         id: 'home',
         title: 'Inicio'
     },
     {
         basePath: PRIVATE_ROUTES.COMPANIES,
-        icon: Building2,
+        icon: 'ti-building',
         id: 'companies',
         title: 'Empresas'
     },
     {
         basePath: PRIVATE_ROUTES.USERS,
-        icon: Users,
+        icon: 'ti-users',
         id: 'users',
         title: 'Usuarios'
     },
     {
         basePath: PRIVATE_ROUTES.MY_COMPANY,
-        icon: Briefcase,
+        icon: 'ti-briefcase',
         id: 'my-company',
         title: 'Mi empresa'
     }
 ];
+
+export const SIDENAV_STORAGE_KEY = 'sidenav-expanded';

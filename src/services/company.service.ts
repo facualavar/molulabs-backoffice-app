@@ -5,6 +5,7 @@ import type { ExportJob } from '@/domain/models/export.model';
 import type { PaginatedResponse } from '@/domain/models/pagination.model';
 
 export interface CompanyExportParams {
+    documentNumber?: string;
     name?: string;
 }
 

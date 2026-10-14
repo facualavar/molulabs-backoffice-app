@@ -23,3 +23,6 @@ export interface Company {
     name: string;
     phone: string;
 }
+
+export const getDocumentTypeOptions = (): { label: string; value: DocumentType }[] =>
+    Object.values(DOCUMENT_TYPE).map((value) => ({ label: DOCUMENT_TYPE_LABEL[value], value }));

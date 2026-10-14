@@ -8,7 +8,9 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, './src'),
             'styled-system': path.resolve(__dirname, './styled-system')
-        }
+        },
+        // The linked @molulabs/ds has no node_modules of its own: resolve React from the app
+        dedupe: ['react', 'react-dom']
     },
     css: {
         postcss: {

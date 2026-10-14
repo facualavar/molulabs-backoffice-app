@@ -1,47 +1,33 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Pagination as DsPagination } from '@molulabs/ds';
 
-import { Box, Button, Text } from '@/components/ui';
+import { DEFAULT_ITEMS_PER_PAGE } from '@/domain/constants/pagination.constant';
 
 interface PaginationProps {
     currentPage: number;
+    /** Blocks page changes while the next page is being fetched */
     disabled?: boolean;
     onPageChange: (page: number) => void;
+    pageSize?: number;
     totalItems: number;
-    totalPages: number;
 }
 
+// Pager under a DataTable, inside the same Card
 export const Pagination = ({
     currentPage,
     disabled,
     onPageChange,
-    totalItems,
-    totalPages
+    pageSize = DEFAULT_ITEMS_PER_PAGE,
+    totalItems
 }: PaginationProps) => {
     if (totalItems === 0) return null;
 
     return (
-        <Box alignItems="center" display="flex" gap="4" paddingTop="4">
-            <Button
-                disabled={disabled || currentPage <= 1}
-                icon={<ChevronLeft size={16} />}
-                label="Página anterior"
-                onClick={() => onPageChange(currentPage - 1)}
-                size="xs"
-                type="button"
-                variant="secondary"
-            />
-            <Text color="text" style={{ fontSize: '13px', opacity: 0.65 }} variant="caption">
-                Página {currentPage} de {totalPages}
-            </Text>
-            <Button
-                disabled={disabled || currentPage >= totalPages}
-                icon={<ChevronRight size={16} />}
-                label="Página siguiente"
-                onClick={() => onPageChange(currentPage + 1)}
-                size="xs"
-                type="button"
-                variant="secondary"
-            />
-        </Box>
+        <DsPagination
+            onPage={onPageChange}
+            page={currentPage}
+            pageSize={pageSize}
+            style={disabled ? { opacity: 0.6, pointerEvents: 'none' } : undefined}
+            total={totalItems}
+        />
     );
 };

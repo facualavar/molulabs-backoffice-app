@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+import { Button, Checkbox } from '@molulabs/ds';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { Button, Checkbox, Input, Stack } from '@/components/ui';
+import { Input, Stack } from '@/components/ui';
 
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from '@/domain/constants/form.constant';
 import type { SerializableError } from '@/domain/models/error.model';
@@ -64,23 +65,22 @@ export const LoginForm = ({ errors, loading, onSubmit }: LoginFormProps) => {
                             value={formik.values.password}
                         />
 
-                        <Checkbox
-                            checked={formik.values.rememberMe}
-                            data-testid="login-form-input-remember-me"
-                            id="input-remember-me"
-                            label="Recordar mi usuario"
-                            name="rememberMe"
-                            onChange={formik.handleChange}
-                        />
+                        <div data-testid="login-form-input-remember-me">
+                            <Checkbox
+                                checked={formik.values.rememberMe}
+                                label="Recordar mi usuario"
+                                onChange={(checked) => formik.setFieldValue('rememberMe', checked)}
+                            />
+                        </div>
 
                         <Button
                             data-testid="login-form-action-submit"
-                            fullWidth
-                            label={loading ? 'Ingresando...' : 'Ingresar'}
-                            loading={loading}
-                            size="sm"
+                            disabled={loading}
+                            style={{ width: '100%' }}
                             type="submit"
-                        />
+                        >
+                            {loading ? 'Ingresando...' : 'Ingresar'}
+                        </Button>
                     </Stack>
                 </Form>
             )}

@@ -1,11 +1,12 @@
+import { PageHeader } from '@molulabs/ds';
 import { useNavigate } from 'react-router';
 
 import { useCreateUser } from '@/hooks';
 
-import { Box, Text, toast } from '@/components/ui';
+import { Box, toast } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
-import { toSerializableError } from '@/domain/models/error.model';
+import { getErrorDescription, toSerializableError } from '@/domain/models/error.model';
 
 import { UserForm } from './components/UserForm';
 import { emptyUserFormValues } from './components/UserForm/UserForm.schema';
@@ -29,7 +30,7 @@ export const UserCreatePage = () => {
             {
                 onError: (submitError) =>
                     toast.error('No se pudo crear el usuario', {
-                        description: toSerializableError(submitError).message
+                        description: getErrorDescription(submitError)
                     }),
                 onSuccess: () => {
                     toast.success('Usuario creado correctamente');
@@ -41,9 +42,7 @@ export const UserCreatePage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="title">
-                Nuevo usuario
-            </Text>
+            <PageHeader title="Nuevo usuario" />
             <UserForm
                 errors={error ? toSerializableError(error) : null}
                 initialValues={emptyUserFormValues}

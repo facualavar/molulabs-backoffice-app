@@ -1,20 +1,24 @@
 import { useEffect, useState } from 'react';
 
+import { Button, PageHeader, TableToolbar } from '@molulabs/ds';
 import { useNavigate, useSearchParams } from 'react-router';
+
+import { exportUsers } from '@/services/user.service';
 
 import { useCurrentUser, useDeleteUser, useNameSearch, useUsers } from '@/hooks';
 
+import { ConfirmDeleteModal } from '@/components/ConfirmDeleteModal';
+import { ExportButton } from '@/components/ExportButton';
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Button, Input, Pagination, Select, Text, toast } from '@/components/ui';
+import { Box, Input, Pagination, Select, toast } from '@/components/ui';
 
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '@/domain/constants/pagination.constant';
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
 import { MIN_SEARCH_CHARS } from '@/domain/constants/search.constant';
-import { toSerializableError } from '@/domain/models/error.model';
+import { getErrorDescription } from '@/domain/models/error.model';
 import type { User } from '@/domain/models/user.model';
 import { getRoleOptions } from '@/domain/models/usuario.model';
 
-import { UsersExport } from './components/UsersExport';
 import { UsersTable } from './components/UsersTable';
 
 export const UsersPage = () => {
@@ -71,20 +75,20 @@ export const UsersPage = () => {
         page,
         role: roleFilter || undefined
     });
-    const { mutate: deleteUser } = useDeleteUser();
+    const { isPending: isDeleting, mutate: deleteUser } = useDeleteUser();
+    const [pendingDelete, setPendingDelete] = useState<null | User>(null);
 
-    const handleDelete = (user: User) => {
-        const confirmed = window.confirm(`¿Eliminar a ${user.firstname} ${user.lastname}?`);
+    const handleConfirmDelete = () => {
+        if (!pendingDelete) return;
 
-        if (confirmed) {
-            deleteUser(user.id, {
-                onError: (deleteError) =>
-                    toast.error('No se pudo eliminar el usuario', {
-                        description: toSerializableError(deleteError).message
-                    }),
-                onSuccess: () => toast.success('Usuario eliminado correctamente')
-            });
-        }
+        deleteUser(pendingDelete.id, {
+            onError: (deleteError) =>
+                toast.error('No se pudo eliminar el usuario', {
+                    description: getErrorDescription(deleteError)
+                }),
+            onSettled: () => setPendingDelete(null),
+            onSuccess: () => toast.success('Usuario eliminado correctamente')
+        });
     };
 
     if (isLoading || !data) {
@@ -93,61 +97,80 @@ export const UsersPage = () => {
 
     return (
         <Box>
-            <Box alignItems="center" display="flex" justifyContent="space-between" marginBottom="6">
-                <Text variant="title">Usuarios</Text>
-                <Box alignItems="center" display="flex" gap="3">
-                    <UsersExport
-                        key={`${nameFilter}-${roleFilter}`}
-                        name={nameFilter || undefined}
-                        role={roleFilter || undefined}
-                    />
-                    <Button
-                        label="Nuevo usuario"
-                        onClick={() => navigate(PRIVATE_ROUTES.USERS_NEW)}
-                        size="sm"
-                    />
-                </Box>
-            </Box>
+            <PageHeader style={{ marginBottom: 'var(--space-6)' }} title="Usuarios" />
 
-            <Box display="flex" gap="4" marginBottom="4">
-                <Box maxWidth="320px" width="100%">
-                    <Input
-                        data-testid="users-filter-input-name"
-                        label="Nombre"
-                        onChange={(event) => setNameInput(event.target.value)}
-                        placeholder="Buscar por nombre o apellido..."
-                        value={nameInput}
-                    />
-                </Box>
-                <Box maxWidth="220px" width="100%">
-                    <Select
-                        data-testid="users-filter-select-role"
-                        label="Filtrar por rol"
-                        onChange={handleRoleChange}
-                        options={roleFilterOptions}
-                        placeholder="Todos los roles"
-                        value={roleFilter}
-                    />
-                </Box>
-                <Box maxWidth="220px" width="100%">
-                    <Input
-                        data-testid="users-filter-input-document-number"
-                        label="N° de documento"
-                        onChange={(event) => setDocumentNumberInput(event.target.value)}
-                        placeholder="Buscar por documento..."
-                        value={documentNumberInput}
-                    />
-                </Box>
-            </Box>
+            <TableToolbar
+                actions={
+                    <>
+                        <ExportButton
+                            data-testid="users-export-action-export"
+                            key={`${nameFilter}-${roleFilter}-${documentNumberFilter}`}
+                            onExport={() =>
+                                exportUsers({
+                                    documentNumber: documentNumberFilter || undefined,
+                                    name: nameFilter || undefined,
+                                    role: roleFilter || undefined
+                                })
+                            }
+                        />
+                        <Button
+                            icon="ti-plus"
+                            onClick={() => navigate(PRIVATE_ROUTES.USERS_NEW)}
+                            size="sm"
+                        >
+                            Nuevo usuario
+                        </Button>
+                    </>
+                }
+                filters={
+                    <>
+                        <Input
+                            data-testid="users-filter-input-name"
+                            hideLabel
+                            label="Nombre"
+                            onChange={(event) => setNameInput(event.target.value)}
+                            placeholder="Buscar por nombre o apellido"
+                            value={nameInput}
+                        />
+                        <Select
+                            data-testid="users-filter-select-role"
+                            hideLabel
+                            label="Rol"
+                            onChange={handleRoleChange}
+                            options={roleFilterOptions}
+                            placeholder="Todos los roles"
+                            value={roleFilter}
+                        />
+                        <Input
+                            data-testid="users-filter-input-document-number"
+                            hideLabel
+                            label="N° de documento"
+                            onChange={(event) => setDocumentNumberInput(event.target.value)}
+                            placeholder="Buscar por N° de documento"
+                            value={documentNumberInput}
+                        />
+                    </>
+                }
+                filtersMin={200}
+                style={{ marginBottom: 'var(--space-4)' }}
+            />
 
-            <UsersTable onDelete={handleDelete} users={data.data} />
+            <UsersTable onDelete={setPendingDelete} users={data.data}>
+                <Pagination
+                    currentPage={data.meta.page}
+                    disabled={isFetching}
+                    onPageChange={setPage}
+                    totalItems={data.meta.total}
+                />
+            </UsersTable>
 
-            <Pagination
-                currentPage={data.meta.page}
-                disabled={isFetching}
-                onPageChange={setPage}
-                totalItems={data.meta.total}
-                totalPages={data.meta.totalPages}
+            <ConfirmDeleteModal
+                loading={isDeleting}
+                message={`Se va a eliminar a ${pendingDelete?.firstname} ${pendingDelete?.lastname}. Esta acción no se puede deshacer.`}
+                onCancel={() => setPendingDelete(null)}
+                onConfirm={handleConfirmDelete}
+                open={pendingDelete !== null}
+                title="Eliminar usuario"
             />
         </Box>
     );

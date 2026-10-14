@@ -22,6 +22,8 @@ export default defineConfig([
         },
         rules: {
             'perfectionist/sort-imports': 'off',
+            // Prettier's sort-imports plugin owns the order of the imports and of their names
+            'perfectionist/sort-named-imports': 'off',
             'no-console': 'error',
             'no-unused-vars': 'off',
             '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }]

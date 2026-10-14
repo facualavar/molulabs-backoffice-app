@@ -1,12 +1,13 @@
+import { PageHeader } from '@molulabs/ds';
 import { useNavigate, useParams } from 'react-router';
 
 import { useUpdateUser, useUser } from '@/hooks';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Box, Text, toast } from '@/components/ui';
+import { Box, toast } from '@/components/ui';
 
 import { PRIVATE_ROUTES } from '@/domain/constants/routes.constant';
-import { toSerializableError } from '@/domain/models/error.model';
+import { getErrorDescription, toSerializableError } from '@/domain/models/error.model';
 
 import { UserForm } from './components/UserForm';
 import type { UserFormValues } from './components/UserForm/UserForm.schema';
@@ -38,7 +39,7 @@ export const UserEditPage = () => {
             {
                 onError: (submitError) =>
                     toast.error('No se pudo actualizar el usuario', {
-                        description: toSerializableError(submitError).message
+                        description: getErrorDescription(submitError)
                     }),
                 onSuccess: () => {
                     toast.success('Usuario actualizado correctamente');
@@ -50,9 +51,7 @@ export const UserEditPage = () => {
 
     return (
         <Box maxWidth="480px">
-            <Text style={{ marginBottom: '1.5rem' }} variant="title">
-                Editar usuario
-            </Text>
+            <PageHeader title="Editar usuario" />
             <UserForm
                 errors={error ? toSerializableError(error) : null}
                 initialValues={{

@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+import { Button } from '@molulabs/ds';
 import type { FormikProps } from 'formik';
 import { Form, Formik } from 'formik';
 
-import { Button, Input, Stack } from '@/components/ui';
+import { Input, Stack } from '@/components/ui';
 
 import { PASSWORD_MAX_LENGTH } from '@/domain/constants/form.constant';
 import type { SerializableError } from '@/domain/models/error.model';
@@ -101,11 +102,11 @@ export const UpdatePasswordForm = ({
 
                         <Button
                             data-testid="update-password-form-action-submit"
-                            label={loading ? 'Guardando...' : 'Actualizar contraseña'}
-                            loading={loading}
-                            size="sm"
+                            disabled={loading}
                             type="submit"
-                        />
+                        >
+                            {loading ? 'Guardando...' : 'Actualizar contraseña'}
+                        </Button>
                     </Stack>
                 </Form>
             )}

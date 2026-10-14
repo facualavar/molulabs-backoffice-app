@@ -1,190 +1,155 @@
-import type { ComponentPropsWithoutRef } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 
-import { css, cx } from 'styled-system/css';
+import type { AutocompleteItem } from '@molulabs/ds';
+import { Autocomplete as DsAutocomplete, Field } from '@molulabs/ds';
+
+import { HiddenLabel } from '../HiddenLabel/HiddenLabel.component';
 
 export interface AutocompleteOption {
     id: string;
     label: string;
+    /** Secondary figure shown right-aligned in the menu, e.g. the document number */
+    meta?: string;
 }
 
-interface AutocompleteProps extends Omit<
-    ComponentPropsWithoutRef<'input'>,
-    'children' | 'onChange' | 'onSelect' | 'value'
-> {
+interface AutocompleteProps {
+    'data-testid'?: string;
+    disabled?: boolean;
     error?: string;
+    /** Keeps the label for screen readers only, for filters whose placeholder says what they filter */
+    hideLabel?: boolean;
+    id?: string;
     isRequired?: boolean;
     label: string;
     loading?: boolean;
     minChars?: number;
+    name?: string;
+    /** Enables the "Crear «texto»" row when the typed text has no exact match */
     onCreate?: (query: string) => void;
     onSearch: (query: string) => void;
     onSelect: (option: AutocompleteOption | null) => void;
     options: AutocompleteOption[];
+    placeholder?: string;
     value: AutocompleteOption | null;
 }
 
 const DEBOUNCE_MS = 300;
 
-const fieldClass = css({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1',
-    position: 'relative'
-});
-const labelClass = css({ color: 'text.label', fontSize: 'xs', fontWeight: 'regular' });
-const inputClass = css({
-    backgroundColor: 'field',
-    borderColor: 'border',
-    borderRadius: 'md',
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    color: 'text',
-    fontSize: 'sm',
-    paddingX: '10px',
-    paddingY: '6px'
-});
-const inputErrorClass = css({ borderColor: 'danger' });
-const errorTextClass = css({ color: 'danger', fontSize: 'xs' });
-const dropdownClass = css({
-    backgroundColor: 'white',
-    borderColor: 'border',
-    borderRadius: 'lg',
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    boxShadow: 'lg',
-    left: 0,
-    marginTop: '1',
-    maxHeight: '240px',
-    overflowY: 'auto',
-    position: 'absolute',
-    right: 0,
-    top: '100%',
-    zIndex: 10
-});
-const optionClass = css({
-    _hover: { backgroundColor: 'surface' },
-    cursor: 'pointer',
-    fontSize: 'sm',
-    padding: '2'
-});
-const messageClass = css({ color: 'text.muted', fontSize: 'sm', padding: '2' });
-const createOptionClass = css({
-    borderTopColor: 'border',
-    borderTopStyle: 'solid',
-    borderTopWidth: '1px',
-    color: 'primary'
-});
-
+// The design system's Autocomplete searches a list it already has and its value is the typed text.
+// This adds what server-side search needs: debounced onSearch, a minimum length, the loading state,
+// a picked option as value (its label shows while the field is not being edited), and clearing it by
+// erasing the text.
 export const Autocomplete = ({
-    className,
+    'data-testid': testId,
     disabled,
     error,
+    hideLabel,
+    id,
     isRequired,
     label,
     loading,
     minChars = 0,
+    name,
     onCreate,
     onSearch,
     onSelect,
     options,
-    value,
-    ...rest
+    placeholder,
+    value
 }: AutocompleteProps) => {
+    const generatedId = useId();
+    const inputId = id ?? generatedId;
     const [query, setQuery] = useState('');
-    const [isOpen, setIsOpen] = useState(false);
-    const blurTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+    const [isEditing, setIsEditing] = useState(false);
+    // Typed since focusing, so an untouched field isn't cleared on blur
+    const [hasTyped, setHasTyped] = useState(false);
 
     useEffect(() => {
-        if (!isOpen || query.length < minChars) return;
+        if (!isEditing || query.length < minChars) return;
 
         const timeout = setTimeout(() => onSearch(query), DEBOUNCE_MS);
 
         return () => clearTimeout(timeout);
-    }, [isOpen, minChars, onSearch, query]);
+    }, [isEditing, minChars, onSearch, query]);
 
-    const handleFocus = () => {
+    const isBelowMinChars = query.length < minChars;
+    const isWaiting = isBelowMinChars || Boolean(loading);
+    const items = useMemo<AutocompleteItem[]>(
+        () =>
+            isWaiting
+                ? []
+                : options.map((option) => ({ label: option.label, meta: option.meta, option })),
+        [isWaiting, options]
+    );
+    const emptyLabel = isBelowMinChars
+        ? `Escribí al menos ${minChars} caracteres`
+        : loading
+          ? 'Buscando...'
+          : 'Sin resultados';
+
+    const startEditing = () => {
+        if (isEditing) return;
+
+        setIsEditing(true);
+        setHasTyped(false);
         setQuery('');
-        setIsOpen(true);
 
         if (minChars === 0) {
             onSearch('');
         }
     };
 
+    const stopEditing = () => {
+        setIsEditing(false);
+        setHasTyped(false);
+        setQuery('');
+    };
+
+    // Erasing the text and leaving the field drops the picked option, the only way to clear it
     const handleBlur = () => {
-        blurTimeout.current = setTimeout(() => setIsOpen(false), 150);
+        if (isEditing && hasTyped && !query.trim() && value) {
+            onSelect(null);
+        }
+        stopEditing();
     };
-
-    const handleSelect = (option: AutocompleteOption) => {
-        clearTimeout(blurTimeout.current);
-        onSelect(option);
-        setQuery('');
-        setIsOpen(false);
-    };
-
-    const handleCreate = (name: string) => {
-        clearTimeout(blurTimeout.current);
-        onCreate?.(name);
-        setQuery('');
-        setIsOpen(false);
-    };
-
-    const displayValue = isOpen ? query : (value?.label ?? '');
-    const trimmedQuery = query.trim().toLowerCase();
-    const canCreate =
-        Boolean(onCreate) &&
-        trimmedQuery.length >= Math.max(minChars, 1) &&
-        !loading &&
-        !options.some((option) => option.label.toLowerCase() === trimmedQuery);
 
     return (
-        <label className={fieldClass}>
-            <span className={labelClass}>
-                {label}
-                {isRequired ? ' *' : ''}
-            </span>
-            <input
-                className={cx(inputClass, error && inputErrorClass, className)}
-                disabled={disabled}
-                onBlur={handleBlur}
-                onChange={(event) => setQuery(event.target.value)}
-                onFocus={handleFocus}
-                value={displayValue}
-                {...rest}
-            />
-            {isOpen ? (
-                <div className={dropdownClass}>
-                    {query.length < minChars ? (
-                        <div className={messageClass}>Escribí al menos {minChars} caracteres</div>
-                    ) : loading ? (
-                        <div className={messageClass}>Buscando...</div>
-                    ) : options.length === 0 && !canCreate ? (
-                        <div className={messageClass}>Sin resultados</div>
-                    ) : (
-                        options.map((option) => (
-                            <div
-                                className={optionClass}
-                                key={option.id}
-                                onClick={() => handleSelect(option)}
-                                onMouseDown={(event) => event.preventDefault()}
-                            >
-                                {option.label}
-                            </div>
-                        ))
-                    )}
-                    {canCreate ? (
-                        <div
-                            className={cx(optionClass, createOptionClass)}
-                            onClick={() => handleCreate(query.trim())}
-                            onMouseDown={(event) => event.preventDefault()}
-                        >
-                            + Crear "{query.trim()}"
-                        </div>
-                    ) : null}
-                </div>
-            ) : null}
-            {error ? <span className={errorTextClass}>{error}</span> : null}
-        </label>
+        <div data-testid={testId} onBlur={handleBlur} onFocus={startEditing}>
+            <Field
+                error={error}
+                htmlFor={inputId}
+                label={hideLabel ? undefined : label}
+                required={isRequired}
+            >
+                {hideLabel ? <HiddenLabel htmlFor={inputId}>{label}</HiddenLabel> : null}
+                <DsAutocomplete
+                    disabled={disabled}
+                    emptyLabel={emptyLabel}
+                    id={inputId}
+                    invalid={Boolean(error)}
+                    items={items}
+                    name={name}
+                    onChange={(text) => {
+                        setIsEditing(true);
+                        setHasTyped(true);
+                        setQuery(text);
+                    }}
+                    onCreate={
+                        onCreate && !isWaiting
+                            ? (text) => {
+                                  onCreate(text);
+                                  stopEditing();
+                              }
+                            : undefined
+                    }
+                    onSelect={(item) => {
+                        onSelect(item.option as AutocompleteOption);
+                        stopEditing();
+                    }}
+                    placeholder={placeholder}
+                    value={isEditing ? query : (value?.label ?? '')}
+                />
+            </Field>
+        </div>
     );
 };

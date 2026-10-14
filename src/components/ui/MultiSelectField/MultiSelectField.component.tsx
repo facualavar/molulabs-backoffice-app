@@ -1,6 +1,7 @@
 import { Box } from 'styled-system/jsx';
 
 import { Text } from '../Text/Text.component';
+import { toggleInList } from './multiSelect.helper';
 
 export interface MultiSelectOption {
     label: string;
@@ -9,14 +10,14 @@ export interface MultiSelectOption {
 
 export const MultiSelectField = ({
     label,
-    onToggle,
+    onChange,
     options,
-    selected
+    value
 }: {
     label: string;
-    onToggle: (value: string) => void;
+    onChange: (value: string[]) => void;
     options: MultiSelectOption[];
-    selected: string[];
+    value: string[];
 }) => (
     <Box>
         <Text color="text.label" style={{ marginBottom: '6px' }} variant="label">
@@ -24,7 +25,7 @@ export const MultiSelectField = ({
         </Text>
         <Box display="flex" flexWrap="wrap" gap="2">
             {options.map((option) => {
-                const isSelected = selected.includes(option.value);
+                const isSelected = value.includes(option.value);
 
                 return (
                     <Box
@@ -38,7 +39,7 @@ export const MultiSelectField = ({
                         cursor="pointer"
                         fontSize="xs"
                         key={option.value}
-                        onClick={() => onToggle(option.value)}
+                        onClick={() => onChange(toggleInList(value, option.value))}
                         padding="2"
                     >
                         {option.label}
