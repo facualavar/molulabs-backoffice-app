@@ -10,6 +10,8 @@ import { Box, Text } from '@/components/ui';
 import type { ExportJob } from '@/domain/models/export.model';
 import { EXPORT_STATUS } from '@/domain/models/export.model';
 
+import { getExportFilename } from '@/shared/utilities/export.utility';
+
 interface ExportButtonProps {
     'data-testid': string;
     /** Starts the export job with the list's current filters */
@@ -32,7 +34,7 @@ export const ExportButton = ({ 'data-testid': testId, onExport }: ExportButtonPr
 
     const handleClick = () => {
         if (isReady && job) {
-            downloadFile({ filename: `${job.type}.xlsx`, id: job.id });
+            downloadFile({ filename: getExportFilename(job), id: job.id });
             setJobId(null);
             return;
         }
